@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -19,7 +20,16 @@ export default function AdminSidebar() {
   return (
     <aside className="admin-sidebar">
       <div>
-        <h2 className="sidebar-logo">RealTimeCabs</h2>
+        <Link href="/admin" className="sidebar-logo" aria-label="RealTimeCabs admin dashboard">
+          <Image
+            src="/logo/cablogosvg.svg"
+            alt="RealTimeCabs"
+            width={210}
+            height={80}
+            priority
+          />
+          <span>Admin console</span>
+        </Link>
 
         <nav className="sidebar-menu">
           {links.map((link) => (

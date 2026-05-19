@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function RidesPage() {
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All Status");
 
   const rides = [
     {
@@ -44,12 +45,23 @@ export default function RidesPage() {
     },
   ];
 
-  const filtered = rides.filter(
-    (r) =>
-      r.id.toLowerCase().includes(search.toLowerCase()) ||
-      r.user.toLowerCase().includes(search.toLowerCase()) ||
-      r.driver.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = rides.filter((r) => {
+    const query = search.trim().toLowerCase();
+    const matchesSearch =
+      r.id.toLowerCase().includes(query) ||
+      r.user.toLowerCase().includes(query) ||
+      r.driver.toLowerCase().includes(query) ||
+      r.from.toLowerCase().includes(query) ||
+      r.to.toLowerCase().includes(query);
+    const matchesStatus = statusFilter === "All Status" || r.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("All Status");
+  };
 
   return (
     <div>
@@ -72,6 +84,20 @@ export default function RidesPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <select
+          className="input"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option>All Status</option>
+          <option>Ongoing</option>
+          <option>Completed</option>
+          <option>Pending</option>
+          <option>Cancelled</option>
+        </select>
+        <button className="admin-btn dark" type="button" onClick={clearFilters}>
+          Clear
+        </button>
       </div>
 
       {/* TABLE */}
@@ -139,6 +165,14 @@ export default function RidesPage() {
 
               </tr>
             ))}
+
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan={7} className="empty-row">
+                  No rides match these filters.
+                </td>
+              </tr>
+            )}
           </tbody>
 
         </table>

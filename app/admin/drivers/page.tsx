@@ -4,6 +4,8 @@ import { useState } from "react";
 
 export default function DriversPage() {
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All Status");
+  const [verificationFilter, setVerificationFilter] = useState("All Verification");
 
   const drivers = [
     {
@@ -38,11 +40,25 @@ export default function DriversPage() {
     },
   ];
 
-  const filtered = drivers.filter(
-    (d) =>
-      d.name.toLowerCase().includes(search.toLowerCase()) ||
-      d.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = drivers.filter((d) => {
+    const query = search.trim().toLowerCase();
+    const verification = d.verified ? "Verified" : "Pending";
+    const matchesSearch =
+      d.name.toLowerCase().includes(query) ||
+      d.email.toLowerCase().includes(query) ||
+      d.id.toLowerCase().includes(query);
+    const matchesStatus = statusFilter === "All Status" || d.status === statusFilter;
+    const matchesVerification =
+      verificationFilter === "All Verification" || verification === verificationFilter;
+
+    return matchesSearch && matchesStatus && matchesVerification;
+  });
+
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("All Status");
+    setVerificationFilter("All Verification");
+  };
 
   return (
     <div>
@@ -65,6 +81,28 @@ export default function DriversPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <select
+          className="input"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option>All Status</option>
+          <option>Online</option>
+          <option>Offline</option>
+          <option>Busy</option>
+        </select>
+        <select
+          className="input"
+          value={verificationFilter}
+          onChange={(e) => setVerificationFilter(e.target.value)}
+        >
+          <option>All Verification</option>
+          <option>Verified</option>
+          <option>Pending</option>
+        </select>
+        <button className="admin-btn dark" type="button" onClick={clearFilters}>
+          Clear
+        </button>
       </div>
 
       {/* TABLE */}
@@ -141,6 +179,14 @@ export default function DriversPage() {
 
               </tr>
             ))}
+
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan={7} className="empty-row">
+                  No drivers match these filters.
+                </td>
+              </tr>
+            )}
           </tbody>
 
         </table>

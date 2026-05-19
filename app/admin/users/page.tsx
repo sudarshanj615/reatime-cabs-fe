@@ -4,6 +4,8 @@ import { useState } from "react";
 
 export default function UsersPage() {
   const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("All Roles");
+  const [statusFilter, setStatusFilter] = useState("All Status");
 
   const users = [
     { id: "U101", name: "Aman Sharma", email: "aman@gmail.com", role: "Customer", status: "Active" },
@@ -13,10 +15,23 @@ export default function UsersPage() {
     { id: "U105", name: "Mike Ross", email: "mike@gmail.com", role: "Driver", status: "Inactive" },
   ];
 
-  const filteredUsers = users.filter((u) =>
-    u.name.toLowerCase().includes(search.toLowerCase()) ||
-    u.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredUsers = users.filter((u) => {
+    const query = search.trim().toLowerCase();
+    const matchesSearch =
+      u.name.toLowerCase().includes(query) ||
+      u.email.toLowerCase().includes(query) ||
+      u.id.toLowerCase().includes(query);
+    const matchesRole = roleFilter === "All Roles" || u.role === roleFilter;
+    const matchesStatus = statusFilter === "All Status" || u.status === statusFilter;
+
+    return matchesSearch && matchesRole && matchesStatus;
+  });
+
+  const clearFilters = () => {
+    setSearch("");
+    setRoleFilter("All Roles");
+    setStatusFilter("All Status");
+  };
 
   return (
     <div className="users-page">
@@ -41,18 +56,30 @@ export default function UsersPage() {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <select className="input">
+        <select
+          className="input"
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+        >
           <option>All Roles</option>
           <option>Customer</option>
           <option>Driver</option>
         </select>
 
-        <select className="input">
+        <select
+          className="input"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
           <option>All Status</option>
           <option>Active</option>
           <option>Blocked</option>
           <option>Inactive</option>
         </select>
+
+        <button className="admin-btn dark" type="button" onClick={clearFilters}>
+          Clear
+        </button>
 
       </div>
 
@@ -108,6 +135,14 @@ export default function UsersPage() {
 
               </tr>
             ))}
+
+            {filteredUsers.length === 0 && (
+              <tr>
+                <td colSpan={5} className="empty-row">
+                  No users match these filters.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
 
