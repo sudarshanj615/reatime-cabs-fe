@@ -11,7 +11,7 @@ export function QuickLinks() {
   ];
 
   return (
-    <ul className="footer-link-list">
+    <ul className="grid gap-3.5 m-0 p-0 list-none [&_a]:text-[#070808] [&_a]:text-[15px] [&_a]:leading-[1.45] [&_a:hover]:text-[#ffd232]">
       {links.map((link) => (
         <li key={link.href}>
           <Link href={link.href}>{link.label}</Link>
@@ -31,7 +31,7 @@ export function AccountLinks() {
   ];
 
   return (
-    <ul className="footer-link-list">
+    <ul className="grid gap-3.5 m-0 p-0 list-none [&_a]:text-[#070808] [&_a]:text-[15px] [&_a]:leading-[1.45] [&_a:hover]:text-[#ffd232]">
       {links.map((link) => (
         <li key={link.href}>
           <Link href={link.href}>{link.label}</Link>
@@ -52,7 +52,7 @@ export function ServiceLinks() {
   ];
 
   return (
-    <ul className="footer-link-list">
+    <ul className="grid gap-3.5 m-0 p-0 list-none [&_a]:text-[#070808] [&_a]:text-[15px] [&_a]:leading-[1.45] [&_a:hover]:text-[#ffd232]">
       {links.map((link) => (
         <li key={link.label}>
           <Link href={link.href}>{link.label}</Link>

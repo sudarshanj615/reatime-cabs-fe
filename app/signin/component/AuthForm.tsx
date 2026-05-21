@@ -65,7 +65,7 @@ export default function AuthForm({
   return (
     <>
       {/* USER / DRIVER SWITCH */}
-      <div className="account-switch">
+      <div className="grid grid-cols-2 gap-[10px] p-1.5 rounded-lg bg-[#f5f0df] mb-[15px] max-[520px]:grid-cols-1 [&_a]:inline-flex [&_a]:items-center [&_a]:justify-center [&_a]:min-h-[42px] [&_a]:rounded-lg [&_a]:bg-white [&_a]:font-extrabold [&_a]:text-black [&_a:hover]:bg-[#ffd232] [&_a:hover]:text-black [&_a.active]:bg-[#F5B800]">
 
         <Link
           href="/signin/user/login"
@@ -93,7 +93,7 @@ export default function AuthForm({
       {/* FORM */}
       <form
         onSubmit={handleSubmit}
-        className="signin-form"
+        className="grid gap-4 [&_label]:grid [&_label]:gap-2 [&_label]:text-[#0b0b0c] [&_label]:font-bold"
       >
 
         <label>
@@ -101,7 +101,7 @@ export default function AuthForm({
           <input
             type="email"
             name="email"
-            className="input"
+            className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
             placeholder="you@example.com"
             required
           />
@@ -112,7 +112,7 @@ export default function AuthForm({
           <input
             type="password"
             name="password"
-            className="input"
+            className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
             placeholder="Enter password"
             required
           />
@@ -124,7 +124,7 @@ export default function AuthForm({
             <input
               type="password"
               name="confirmPassword"
-              className="input"
+              className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
               placeholder="Confirm password"
               required
             />
@@ -132,14 +132,14 @@ export default function AuthForm({
         )}
 
         {message && (
-          <p className="muted">
+          <p className="text-sm text-[rgba(255,255,255,0.7)] mb-[15px]">
             {message}
           </p>
         )}
 
         <button
           type="submit"
-          className="button"
+          className="inline-flex items-center justify-center gap-2 min-h-[52px] border-0 rounded-[10px] p-[10px] bg-[#F2B300] text-[#0a0101] font-bold cursor-pointer mt-[10px] transition duration-300 shadow-[0_8px_18px_rgba(248,189,16,0.28)] max-[520px]:w-full disabled:cursor-default disabled:opacity-70"
           disabled={loading}
         >
           {loading
@@ -151,7 +151,7 @@ export default function AuthForm({
       </form>
 
       {/* FOOTER */}
-      <p className="signin-register">
+      <p className="text-[#5d5d5d] leading-[1.6] text-sm text-center [&_a]:text-[#0b0b0c] [&_a]:font-extrabold [&_a]:underline [&_a]:decoration-[#ffd232] [&_a]:decoration-2">
 
         {mode === "login" ? (
           <>

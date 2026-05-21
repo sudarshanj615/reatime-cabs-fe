@@ -55,9 +55,9 @@ export default function ParcelDimensionsPage() {
   }
 
   return (
-    <div className="parcel-page">
-      <section className="container page-shell">
-        <div className="parcel-form">
+    <div className="bg-[#fffdf3]">
+      <section className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] py-16 max-[520px]:py-10">
+        <div className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)] max-[760px]:p-7 max-[520px]:p-[22px] max-[520px]:rounded-3xl [&_h2]:m-0 [&_h2]:text-3xl [&_label]:grid [&_label]:gap-2 [&_label]:font-extrabold [&_input]:w-full [&_input]:border [&_input]:border-[#eadfbb] [&_input]:rounded-[18px] [&_input]:p-[15px_16px] [&_input]:bg-[#fffdf3] [&_input]:text-[#111] [&_select]:w-full [&_select]:border [&_select]:border-[#eadfbb] [&_select]:rounded-[18px] [&_select]:p-[15px_16px] [&_select]:bg-[#fffdf3] [&_select]:text-[#111] [&_textarea]:w-full [&_textarea]:border [&_textarea]:border-[#eadfbb] [&_textarea]:rounded-[18px] [&_textarea]:p-[15px_16px] [&_textarea]:bg-[#fffdf3] [&_textarea]:text-[#111] [&_textarea]:resize-y [&_button]:w-fit [&_button]:min-h-[54px] [&_button]:border-0 [&_button]:rounded-[18px] [&_button]:px-[34px] [&_button]:bg-[#111] [&_button]:text-white [&_button]:font-black [&_button]:cursor-pointer max-[520px]:[&_button]:w-full">
           <h2>Enter Package Dimensions</h2>
 
           {/* WEIGHT */}
@@ -91,7 +91,7 @@ export default function ParcelDimensionsPage() {
           </label>
 
           {/* DIMENSIONS */}
-          <div className="grid grid-3">
+          <div className="grid gap-6 grid-cols-3 max-[900px]:grid-cols-1 max-[760px]:grid-cols-1">
             {/* LENGTH */}
             <label>
               Length (ft)
@@ -153,15 +153,7 @@ export default function ParcelDimensionsPage() {
           </label>
 
           {/* DETECTED PACKAGE */}
-          <div
-            style={{
-              padding: "18px",
-              borderRadius: "18px",
-              background: "#fff4b8",
-              fontWeight: "700",
-              fontSize: "18px",
-            }}
-          >
+          <div className="rounded-[18px] bg-[#fff4b8] p-[18px] text-lg font-bold">
             Detected Package Type: {packageType}
           </div>
 

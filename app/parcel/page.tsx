@@ -10,23 +10,23 @@ const vehicleTypes = [
 
 export default function ParcelPage() {
   return (
-    <div className="parcel-page">
-      <section className="parcel-hero">
-        <div className="container parcel-hero-grid">
+    <div className="bg-[#fffdf3]">
+      <section className="py-[84px] bg-[#ffd232] max-[520px]:py-[54px] [&_h1]:max-w-[760px] [&_h1]:mt-[18px] [&_h1]:mb-0 [&_h1]:text-[clamp(42px,6vw,76px)] [&_h1]:leading-none [&_h1]:font-black [&_p]:max-w-[650px] [&_p]:mt-5 [&_p]:mb-0 [&_p]:text-[#242424] [&_p]:text-xl [&_p]:leading-[1.65]">
+        <div className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] grid grid-cols-[minmax(0,1.1fr)_minmax(280px,0.9fr)] gap-[42px] items-center max-[760px]:grid-cols-1">
           <div>
-            <span className="hero-pill">Parcel delivery</span>
+            <span className="w-fit rounded-full py-[10px] px-[18px] bg-[rgba(255,255,255,0.65)] text-[#0b0b0c] font-extrabold text-[13px] -translate-y-2 -mt-5 max-[520px]:py-2 max-[520px]:px-3 max-[520px]:text-[11px]">Parcel delivery</span>
             <h1>Send parcels across the city with RealTimeCabs.</h1>
             <p>Choose parcel type, pickup and drop locations, then select the right vehicle for quick delivery.</p>
           </div>
-          <div className="parcel-summary-card">
+          <div className="grid gap-[10px] rounded-[34px] p-[34px] bg-[#111] text-white shadow-[0_24px_50px_rgba(0,0,0,0.18)] [&_strong]:text-[#ffd232] [&_strong]:text-[28px] [&_span]:text-[#f5edcc]">
             <strong>Live parcel booking</strong>
             <span>Bike, Scooty, Auto and Mini options</span>
           </div>
         </div>
 
-        {/* <div className="parcel-summary-card">
+        {/* <div className="grid gap-[10px] rounded-[34px] p-[34px] bg-[#111] text-white shadow-[0_24px_50px_rgba(0,0,0,0.18)] [&_strong]:text-[#ffd232] [&_strong]:text-[28px] [&_span]:text-[#f5edcc]">
   <div className="parcel-summary-title">
-    <i className="bxf bx-location" style={{ color: "#e81414" }} />
+    <i className="bxf bx-location text-[#e81414]" />
     <strong>Live parcel booking</strong>
   </div>
 
@@ -34,8 +34,8 @@ export default function ParcelPage() {
 </div> */}
       </section>
 
-      <section className="container parcel-booking">
-        <form className="parcel-form">
+      <section className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] grid grid-cols-[1.1fr_0.9fr] gap-[34px] py-[72px] max-[760px]:grid-cols-1 max-[520px]:py-11">
+        <form className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)] max-[760px]:p-7 max-[520px]:p-[22px] max-[520px]:rounded-3xl [&_h2]:m-0 [&_h2]:text-3xl [&_label]:grid [&_label]:gap-2 [&_label]:font-extrabold [&_input]:w-full [&_input]:border [&_input]:border-[#eadfbb] [&_input]:rounded-[18px] [&_input]:p-[15px_16px] [&_input]:bg-[#fffdf3] [&_input]:text-[#111] [&_select]:w-full [&_select]:border [&_select]:border-[#eadfbb] [&_select]:rounded-[18px] [&_select]:p-[15px_16px] [&_select]:bg-[#fffdf3] [&_select]:text-[#111] [&_textarea]:w-full [&_textarea]:border [&_textarea]:border-[#eadfbb] [&_textarea]:rounded-[18px] [&_textarea]:p-[15px_16px] [&_textarea]:bg-[#fffdf3] [&_textarea]:text-[#111] [&_textarea]:resize-y [&_button]:w-fit [&_button]:min-h-[54px] [&_button]:border-0 [&_button]:rounded-[18px] [&_button]:px-[34px] [&_button]:bg-[#111] [&_button]:text-white [&_button]:font-black [&_button]:cursor-pointer max-[520px]:[&_button]:w-full">
           <h2>Book a parcel delivery</h2>
           <label>
             Parcel Type
@@ -48,44 +48,30 @@ export default function ParcelPage() {
               ))}
             </select>
           </label>
-          <div className="grid grid-2">
+          <div className="grid gap-6 grid-cols-2 max-[900px]:grid-cols-1 max-[760px]:grid-cols-1">
             <label>
               Pickup Location
-              <span style={{ position: "relative", display: "block" }}>
+              <span className="relative block">
                 <FaMapMarkerAlt
                   aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    left: 16,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "#e81414",
-                    pointerEvents: "none",
-                  }}
+                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#e81414]"
                 />
                 <input
                   placeholder="Enter pickup address"
-                  style={{ paddingLeft: 42 }}
+                  className="pl-[42px]"
                 />
               </span>
             </label>
             <label>
               Drop Location
-              <span style={{ position: "relative", display: "block" }}>
+              <span className="relative block">
                 <FaMapMarkerAlt
                   aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    left: 16,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "#e81414",
-                    pointerEvents: "none",
-                  }}
+                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#e81414]"
                 />
                 <input
                   placeholder="Enter drop address"
-                  style={{ paddingLeft: 42 }}
+                  className="pl-[42px]"
                 />
               </span>
             </label>
@@ -101,9 +87,9 @@ export default function ParcelPage() {
           <button type="submit">Continue Parcel Booking</button>
         </form>
 
-        <aside className="vehicle-select">
+        <aside className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)] max-[760px]:p-7 max-[520px]:p-[22px] max-[520px]:rounded-3xl [&_h2]:m-0 [&_h2]:text-3xl">
           <h2>Select vehicle</h2>
-          <div className="vehicle-grid">
+          <div className="grid gap-3.5 [&_button]:grid [&_button]:gap-1.5 [&_button]:border [&_button]:border-[#eadfbb] [&_button]:rounded-[22px] [&_button]:p-[18px] [&_button]:bg-[#fffdf3] [&_button]:text-[#111] [&_button]:text-left [&_button]:cursor-pointer [&_button:hover]:border-[#ffd232] [&_button:hover]:bg-[#F2B300] [&_strong]:text-lg [&_span]:text-[#5d5d5d] [&_span]:leading-[1.5]">
             {vehicleTypes.map((vehicle) => (
               <button type="button" key={vehicle.name}>
                 <strong>{vehicle.name}</strong>

@@ -10,12 +10,12 @@ export function Logo() {
       aria-label={`${appConfig.name} home`}
     >
       <Image
-        src="/logo/cablogosvg.svg"   
+        src="/logo/cablogosvg.svg"
         alt={`${appConfig.name} logo`}
         width={400}
         height={120}
         priority
-        className="w-24 h-auto object-contain -translate-y-1"
+        className="w-56 h-auto object-contain -translate-y-1"
       />
     </Link>
   );

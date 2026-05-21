@@ -8,7 +8,7 @@ export function NavLinks() {
   const pathname = usePathname();
 
   return (
-    <nav className="nav-links" aria-label="Main navigation">
+    <nav className="flex items-center gap-[26px] text-[#0f0c0c] font-bold text-[15px] max-[1100px]:gap-4 max-[1100px]:text-[30px] max-[1100px]:ml-3 max-[900px]:hidden max-[760px]:hidden [&_.navbar-link]:no-underline [&_.navbar-link]:py-1.5 [&_.navbar-link]:px-2.5 [&_.navbar-link]:rounded [&_.navbar-link]:text-[rgb(10,9,9)] [&_.navbar-link:hover]:bg-[#eee] [&_.navbar-link-active]:bg-[#eee] [&_.navbar-link-active]:font-semibold" aria-label="Main navigation">
       {navLinks.map((link) => {
         const isActive = pathname === link.href; // check if this link is active
         return (

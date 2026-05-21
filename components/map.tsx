@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
 import { Protocol } from "pmtiles";
 
 export default function Map() {
@@ -115,14 +114,6 @@ export default function Map() {
   }, []);
 
   return (
-    <div
-      ref={mapRef}
-      style={{
-        width: "100%",
-        height: "500px",
-        borderRadius: "16px",
-        overflow: "hidden",
-      }}
-    />
+    <div ref={mapRef} className="h-[500px] w-full overflow-hidden rounded-2xl" />
   );
 }

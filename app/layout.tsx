@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className="min-h-full">
+      <body className="m-0 min-h-full bg-[#fffdf3] text-[#0b0b0c] [font-family:Poppins,Arial,Helvetica,sans-serif] [&_a]:text-inherit [&_a]:no-underline">
         <Navbar />
         {children}
         <Footer />

@@ -3,9 +3,9 @@
 
 // export function CabSelector() {
 //   return (
-//     <div className="stack">
+//     <div className="grid gap-[18px]">
 //       <h2>Select Cab Type</h2>
-//       {/* <div className="grid grid-5">
+//       {/* <div className="grid gap-6 grid-cols-5 max-[1100px]:grid-cols-3 max-[900px]:grid-cols-1 max-[760px]:grid-cols-1">
 //         {cabTypes.map((cab) => (
 //           <CabCard cab={cab} key={cab.id} />
 //         ))}
@@ -25,10 +25,10 @@ export function CabSelector() {
   );
 
   return (
-    <div className="stack">
+    <div className="grid gap-[18px]">
       <h2>Select Cab Type</h2>
 
-      <div className="grid grid-5">
+      <div className="grid gap-6 grid-cols-5 max-[1100px]:grid-cols-3 max-[900px]:grid-cols-1 max-[760px]:grid-cols-1">
         {filteredCabs.map((cab) => (
           <CabCard cab={cab} key={cab.id} />
         ))}

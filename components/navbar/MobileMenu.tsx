@@ -8,49 +8,38 @@ export function MobileMenu() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="mobile-menu" style={{ position: "relative" }}>
+    <div className="relative">
       {/* Hamburger button */}
       <button
-        className="hamburger-button"
+        className="cursor-pointer border-0 bg-transparent p-0"
         type="button"
         onClick={() => setOpen((prev) => !prev)}
       >
         {/* simple 3-line hamburger icon */}
-        <span style={{ display: "block", width: 24, height: 2, background: "#000", margin: "4px 0" }} />
-        <span style={{ display: "block", width: 24, height: 2, background: "#000", margin: "4px 0" }} />
-        <span style={{ display: "block", width: 24, height: 2, background: "#000", margin: "4px 0" }} />
+        <span className="my-1 block h-0.5 w-6 bg-black" />
+        <span className="my-1 block h-0.5 w-6 bg-black" />
+        <span className="my-1 block h-0.5 w-6 bg-black" />
       </button>
 
       {/* Dropdown menu */}
       {open && (
         <div
-          className="card stack"
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "48px",
-            background: "white",
-            padding: "16px",
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-            zIndex: 50,
-          }}
+          className="absolute right-0 top-12 z-50 grid gap-[18px] rounded-lg border border-[#f0df9e] bg-white p-4 shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
         >
           {navLinks.map((link) => (
             <Link
               href={link.href}
               key={link.href}
               onClick={() => setOpen(false)}
-              style={{ display: "block", margin: "8px 0" }}
+              className="my-2 block"
             >
               {link.label}
             </Link>
           ))}
           <Link
-            className="signin-link"
+            className="mt-2 block font-bold"
             href="/signin?mode=login&role=user"
             onClick={() => setOpen(false)}
-            style={{ display: "block", marginTop: "8px", fontWeight: "bold" }}
           >
             Sign In
           </Link>
