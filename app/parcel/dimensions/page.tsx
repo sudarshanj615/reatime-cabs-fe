@@ -1,168 +1,128 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-export default function ParcelDimensionsPage() {
-  // STATES
-  const [weight, setWeight] = useState("");
-  const [quantity, setQuantity] = useState("");
+type Suggestion = {
+  display_name: string;
+  lat: string;
+  lon: string;
+};
 
-  const [length, setLength] = useState("");
-  const [width, setWidth] = useState("");
-  const [height, setHeight] = useState("");
+export function SearchRideBox() {
+  const router = useRouter();
 
-  const [instructions, setInstructions] = useState("");
+  const [pickup, setPickup] = useState("");
+  const [drop, setDrop] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // PACKAGE DETECTION
-  let packageType = "Fill all package details";
+  const [pickupSuggestions, setPickupSuggestions] = useState<Suggestion[]>([]);
 
-  const allFieldsFilled =
-    weight !== "" &&
-    quantity !== "" &&
-    length !== "" &&
-    width !== "" &&
-    height !== "";
-
-  if (allFieldsFilled) {
-    const weightValue = Number(weight);
-
-    const volume =
-      Number(length) *
-      Number(width) *
-      Number(height);
-
-    // SMALL PACKAGE
-    if (weightValue <= 5 && volume <= 50000) {
-      packageType = "Small Package";
+  // suggestions
+  const fetchSuggestions = async (query: string) => {
+    if (!query || query.length < 3) {
+      setPickupSuggestions([]);
+      return;
     }
 
-    // MEDIUM PACKAGE
-    else if (
-      weightValue > 5 &&
-      weightValue <= 15 &&
-      volume <= 150000
-    ) {
-      packageType = "Medium Package";
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}&limit=5`
+      );
+
+      const data = await response.json();
+      setPickupSuggestions(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      fetchSuggestions(pickup);
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [pickup]);
+
+  // BOOK RIDE → backend call
+  const handleBookRide = async () => {
+    if (!pickup.trim() || !drop.trim()) {
+      alert("Please enter pickup and drop");
+      return;
     }
 
-    // LARGE PACKAGE
-    else if (weightValue > 15) {
-      packageType = "Large Package";
+    try {
+      setLoading(true);
+
+      const res = await axios.post(
+        "http://192.168.1.23:8081/rides/book",
+        {
+          pickup,
+          drop,
+        }
+      );
+
+      console.log(res.data);
+      alert("Ride booked successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Booking failed");
+    } finally {
+      setLoading(false);
     }
-    else {
-      packageType = "Large Package";
-    }
-  }
+  };
 
   return (
-    <div className="bg-[#fffdf3]">
-      <section className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] py-16 max-[520px]:py-10">
-        <div className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)] max-[760px]:p-7 max-[520px]:p-[22px] max-[520px]:rounded-3xl [&_h2]:m-0 [&_h2]:text-3xl [&_label]:grid [&_label]:gap-2 [&_label]:font-extrabold [&_input]:w-full [&_input]:border [&_input]:border-[#eadfbb] [&_input]:rounded-[18px] [&_input]:p-[15px_16px] [&_input]:bg-[#fffdf3] [&_input]:text-[#111] [&_select]:w-full [&_select]:border [&_select]:border-[#eadfbb] [&_select]:rounded-[18px] [&_select]:p-[15px_16px] [&_select]:bg-[#fffdf3] [&_select]:text-[#111] [&_textarea]:w-full [&_textarea]:border [&_textarea]:border-[#eadfbb] [&_textarea]:rounded-[18px] [&_textarea]:p-[15px_16px] [&_textarea]:bg-[#fffdf3] [&_textarea]:text-[#111] [&_textarea]:resize-y [&_button]:w-fit [&_button]:min-h-[54px] [&_button]:border-0 [&_button]:rounded-[18px] [&_button]:px-[34px] [&_button]:bg-[#111] [&_button]:text-white [&_button]:font-black [&_button]:cursor-pointer max-[520px]:[&_button]:w-full">
-          <h2>Enter Package Dimensions</h2>
+    <div className="mt-[-205px] grid grid-cols-[1fr_1fr_auto] gap-3.5 rounded-[30px] p-3.5 bg-[rgba(255,255,255,0.35)] backdrop-blur-[18px] shadow-[0_22px_50px_rgba(16,16,16,0.16)] border border-[rgba(255,255,255,0.4)] max-[900px]:grid-cols-1">
 
-          {/* WEIGHT */}
-          <label>
-            Parcel Weight (kg)
+      {/* PICKUP */}
+      <div className="relative w-full">
+        <input
+          placeholder="Enter pickup location"
+          value={pickup}
+          onChange={(e) => setPickup(e.target.value)}
+          className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)]"
+        />
 
-            <input
-              type="number"
-              min="0"
-              value={weight}
-              onChange={(e) =>
-                setWeight(e.target.value)
-              }
-              placeholder="Enter parcel weight"
-            />
-          </label>
-
-          {/* QUANTITY */}
-          <label>
-            Parcel Quantity
-
-            <input
-              type="number"
-              min="1"
-              value={quantity}
-              onChange={(e) =>
-                setQuantity(e.target.value)
-              }
-              placeholder="Enter parcel quantity"
-            />
-          </label>
-
-          {/* DIMENSIONS */}
-          <div className="grid gap-6 grid-cols-3 max-[900px]:grid-cols-1 max-[760px]:grid-cols-1">
-            {/* LENGTH */}
-            <label>
-              Length (ft)
-
-              <input
-                type="number"
-                min="0"
-                value={length}
-                onChange={(e) =>
-                  setLength(e.target.value)
-                }
-                placeholder="Length"
-              />
-            </label>
-
-            {/* WIDTH */}
-            <label>
-              Width (ft)
-
-              <input
-                type="number"
-                min="0"
-                value={width}
-                onChange={(e) =>
-                  setWidth(e.target.value)
-                }
-                placeholder="Width"
-              />
-            </label>
-
-            {/* HEIGHT */}
-            <label>
-              Height (ft)
-
-              <input
-                type="number"
-                min="0"
-                value={height}
-                onChange={(e) =>
-                  setHeight(e.target.value)
-                }
-                placeholder="Height"
-              />
-            </label>
+        {/* suggestions */}
+        {pickupSuggestions.length > 0 && (
+          <div className="absolute left-0 right-0 top-[110%] z-[9999] max-h-[260px] overflow-y-auto rounded-[14px] border bg-white shadow">
+            {pickupSuggestions.map((item, index) => (
+              <div
+                key={index}
+                onClick={() => {
+                  setPickup(item.display_name);
+                  setPickupSuggestions([]);
+                }}
+                className="cursor-pointer px-3 py-2 text-sm border-b last:border-none"
+              >
+                {item.display_name}
+              </div>
+            ))}
           </div>
+        )}
+      </div>
 
-          {/* INSTRUCTIONS */}
-          <label>
-            Additional Instructions
+      {/* DROP */}
+      <input
+        placeholder="Enter drop location"
+        value={drop}
+        onChange={(e) => setDrop(e.target.value)}
+        className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)]"
+      />
 
-            <textarea
-              rows={4}
-              value={instructions}
-              onChange={(e) =>
-                setInstructions(e.target.value)
-              }
-              placeholder="Fragile, handle carefully, call before delivery, etc."
-            />
-          </label>
-
-          {/* DETECTED PACKAGE */}
-          <div className="rounded-[18px] bg-[#fff4b8] p-[18px] text-lg font-bold">
-            Detected Package Type: {packageType}
-          </div>
-
-          {/* BUTTON */}
-          <button type="submit">
-            Continue Booking
-          </button>
-        </div>
-      </section>
+      {/* BUTTON */}
+      <button
+        onClick={handleBookRide}
+        disabled={loading}
+        className="inline-flex items-center justify-center min-h-[52px] rounded-[10px] bg-[#F2B300] font-bold text-[#111] disabled:opacity-60"
+      >
+        {loading ? "Booking..." : "Book Now"}
+      </button>
     </div>
   );
 }
