@@ -12,10 +12,10 @@ export function Logo() {
       <Image
         src="/logo/cablogosvg.svg"   
         alt={`${appConfig.name} logo`}
-        width={420}
-        height={160}
+        width={400}
+        height={120}
         priority
-        className="w-40 h-auto object-contain -translate-y-1"
+        className="w-24 h-auto object-contain -translate-y-1"
       />
     </Link>
   );

@@ -7,7 +7,7 @@ export function QuickLinks() {
     { label: "Parcel", href: "/parcel" },
     { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" },
-    { label: "Support", href: "/support" },
+    // { label: "Support", href: "/support" },
   ];
 
   return (
@@ -23,10 +23,10 @@ export function QuickLinks() {
 
 export function AccountLinks() {
   const links = [
-    { label: "User Login", href: "/login/user" },
-    { label: "Driver Login", href: "/login/driver" },
-    { label: "User Register", href: "/register/user" },
-    { label: "Driver Register", href: "/register/driver" },
+    { label: "User Login", href: "/signin?mode=login&role=user" },
+    { label: "Driver Login", href: "/signin?mode=login&role=driver" },
+    { label: "User Register", href: "/signin?mode=signup&role=user" },
+    { label: "Driver Register", href: "/signin?mode=signup&role=driver" },
     { label: "Ride History", href: "/dashboard/user/ride-history" },
   ];
 
@@ -48,7 +48,7 @@ export function ServiceLinks() {
     { label: "Bike Ride", href: "/dashboard/user/book-ride" },
     { label: "Scooty Ride", href: "/dashboard/user/book-ride" },
     { label: "SUV Ride", href: "/dashboard/user/book-ride" },
-    { label: "Parcel Delivery", href: "/parcel" },
+    // { label: "Parcel Delivery", href: "/parcel" },
   ];
 
   return (

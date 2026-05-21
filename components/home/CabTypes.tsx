@@ -7,7 +7,7 @@ export function CabTypes() {
         <span>Our services</span>
         <h2>One app, many ways to move</h2>
       </div>
-      <div className="service-grid">
+      { <div className="service-grid">
         {cabTypes.map((cab) => (
           <div className="service-card" key={cab.id}>
             <div className="service-icon">{cab.icon}</div>
@@ -15,7 +15,7 @@ export function CabTypes() {
             <p>{cab.seats} seat ride starting from Rs. {cab.baseFare}</p>
           </div>
         ))}
-      </div>
+      </div> }
     </div>
   );
 }

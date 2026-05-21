@@ -1,18 +1,9 @@
-"use client";
-
 import { Logo } from "@/components/navbar/Logo";
 import { appConfig } from "@/constants/appConfig";
-import { usePathname } from "next/navigation";
 import { ContactInfo } from "./ContactInfo";
 import { AccountLinks, QuickLinks, ServiceLinks } from "./QuickLinks";
 
 export function Footer() {
-  const pathname = usePathname();
-
-  if (pathname.startsWith("/admin")) {
-    return null;
-  }
-
   return (
     <footer className="footer">
       <div className="footer-promo">
@@ -35,7 +26,7 @@ export function Footer() {
 
         <div className="footer-links-row">
           <section>
-            <h3>RealTimeCabs</h3>
+            <h3>Real Time Cabs</h3>
             <QuickLinks />
           </section>
           <section>

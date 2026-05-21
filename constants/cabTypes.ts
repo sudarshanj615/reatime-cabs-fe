@@ -4,6 +4,7 @@ export const cabTypes = [
   { id: "bike", name: "Bike", seats: 1, baseFare: 35, icon: "🏍" },
   { id: "scooty", name: "Scooty", seats: 1, baseFare: 32, icon: "🛵" },
   { id: "suv", name: "SUV", seats: 6, baseFare: 149, icon: "🚙" },
+  { id: "Parcel", name: "Parcel", seats: 6, baseFare: 149, icon: "🚚" },
 ] as const;
 
 export type CabTypeId = (typeof cabTypes)[number]["id"];
