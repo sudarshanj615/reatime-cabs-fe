@@ -65,7 +65,17 @@ export default function AuthForm({
   return (
     <>
       {/* USER / DRIVER SWITCH */}
-      <div className="grid grid-cols-2 gap-[10px] p-1.5 rounded-lg bg-[#f5f0df] mb-[15px] max-[520px]:grid-cols-1 [&_a]:inline-flex [&_a]:items-center [&_a]:justify-center [&_a]:min-h-[42px] [&_a]:rounded-lg [&_a]:bg-white [&_a]:font-extrabold [&_a]:text-black [&_a:hover]:bg-[#ffd232] [&_a:hover]:text-black [&_a.active]:bg-[#F5B800]">
+    <div className="grid grid-cols-2 gap-[10px] p-1.5 rounded-lg bg-[#f5f0df] mb-[15px] max-[520px]:grid-cols-1
+          [&_a]:inline-flex [&_a]:items-center [&_a]:justify-center
+          [&_a]:min-h-[42px] [&_a]:rounded-lg
+          [&_a]:bg-white
+          [&_a]:!text-black
+          [&_a]:font-extrabold
+          [&_a]:transition-all
+          [&_a:hover]:bg-[#ffd232]
+          [&_a:hover]:!text-black
+          [&_a.active]:bg-[#F5B800]
+          [&_a.active]:!text-black">
 
         <Link
           href="/signin/user/login"
@@ -132,9 +142,15 @@ export default function AuthForm({
         )}
 
         {message && (
-          <p className="text-sm text-[rgba(255,255,255,0.7)] mb-[15px]">
-            {message}
-          </p>
+          <p
+  className={`text-sm mb-[15px] font-medium ${
+    message.toLowerCase().includes("wrong") || message.toLowerCase().includes("error")
+      ? "text-red-600"
+      : "text-green-600"
+  }`}
+>
+  {message}
+</p>
         )}
 
         <button

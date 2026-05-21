@@ -22,7 +22,7 @@ function SuccessContent() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold">ðŸš— Ride Created</h1>
+      <h1 className="text-2xl font-bold">🚕— Ride Created</h1>
 
       <p>Pickup: {pickup}</p>
       <p>Drop: {drop}</p>
@@ -30,11 +30,11 @@ function SuccessContent() {
       {open && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[rgba(0,0,0,0.6)] p-5">
           <div className="min-h-[300px] w-full max-w-[520px] animate-[pop_0.25s_ease-out] rounded-[20px] bg-white p-7 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
-            <h2>ðŸŽ‰ Ride Confirmed</h2>
+            <h2>🎉 Ride Confirmed</h2>
 
-            <p>ðŸ‘¨ Driver: {ride.driverName}</p>
-            <p>ðŸš˜ Vehicle: {ride.vehicleNo}</p>
-            <p>ðŸ’° Fare: â‚¹{ride.fare}</p>
+            <p>👨 Driver: {ride.driverName}</p>
+            <p>🚘 Vehicle: {ride.vehicleNo}</p>
+            <p>💰 Fare: ₹{ride.fare}</p>
 
             <button
               onClick={() => {

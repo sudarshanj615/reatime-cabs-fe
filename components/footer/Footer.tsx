@@ -5,7 +5,7 @@ import { AccountLinks, QuickLinks, ServiceLinks } from "./QuickLinks";
 
 export function Footer() {
   return (
-    <footer className="bg-[rgb(253,252,252)] text-white [&_.muted]:text-[#f5e9bd]">
+    <footer className="bg-[rgb(253,252,252)] text-black [&_.muted]:text-[#f5e9bd]">
       <div className="border-t-[6px] border-t-[#ffd232] border-b border-b-[rgba(255,255,255,0.12)] bg-[#f5f3f3]">
         <div className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] flex items-center justify-between gap-7 min-h-[72px] text-[#0e0a07] [&_strong]:uppercase [&_strong]:tracking-normal max-[760px]:items-start max-[760px]:flex-col max-[760px]:justify-center max-[760px]:py-3.5 max-[520px]:gap-2">
           <strong>Realtime rides across your city</strong>
