@@ -1,0 +1,15 @@
+.text-brand {
+  color: var(--brand);
+}
+
+.bg-surface {
+  background: var(--surface);
+}
+
+.logo-image {
+  max-height: 220px;
+  max-width: 100px;
+}
+
+
+
