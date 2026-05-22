@@ -27,7 +27,9 @@ export default function HomePage() {
 
           <section className="grid grid-cols-[1fr_auto] gap-7 items-center rounded-[36px] p-11 bg-[#ffd232] max-[900px]:grid-cols-1 max-[900px]:items-start max-[760px]:grid-cols-1 max-[760px]:p-7 max-[520px]:p-[26px] max-[520px]:rounded-[26px] [&_h2]:max-w-[720px] [&_h2]:mx-auto [&_h2]:my-0 [&_h2]:text-[clamp(32px,4vw,52px)] [&_h2]:leading-[1.08] [&_h2]:font-black max-[520px]:[&_h2]:text-[30px] [&_.hero-pill]:bg-white">
             <div>
-              <span className="w-fit rounded-full py-[10px] px-[18px] bg-[rgba(255,255,255,0.65)] text-[#0b0b0c] font-extrabold text-[13px] -translate-y-2 -mt-5 max-[520px]:py-2 max-[520px]:px-3 max-[520px]:text-[11px]">Get the app experience</span>
+              <span className="w-fit inline-block rounded-full py-[10px] px-[18px] bg-[rgba(255,255,255,0.65)] text-[#0b0b0c] font-extrabold text-[13px] -translate-y-3 max-[520px]:py-2 max-[520px]:px-3 max-[520px]:text-[11px]">
+              Get the app experience
+            </span>
               <h2>Book rides and manage trips from one clean dashboard.</h2>
             </div>
 

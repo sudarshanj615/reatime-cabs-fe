@@ -24,7 +24,7 @@ export default function AdminSidebar() {
           <Image
             src="/logo/cablogosvg.svg"
             alt="RealTimeCabs"
-            width={210}
+            width={190}
             height={80}
             priority
           />
@@ -46,7 +46,7 @@ export default function AdminSidebar() {
         </nav>
       </div>
 
-      <button className="border-0 bg-[#5a584f] text-white py-3 px-4 rounded-[10px] cursor-pointer font-semibold transition duration-200 ease-in hover:bg-[#ffcc06]">Logout</button>
+      <button  onClick={() => (window.location.href = "/")} className="border-0 bg-[#5a584f] text-white py-3 px-4 rounded-[10px] cursor-pointer font-semibold transition duration-200 ease-in hover:bg-[#ffc836] hover:text-black">Logout</button>
     </aside>
   );
 }

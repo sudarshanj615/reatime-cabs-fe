@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MapPicker } from "@/components/MapPicker";
 
 const parcelTypes = [
   "Documents",
@@ -12,47 +13,69 @@ const parcelTypes = [
 ];
 
 const vehicleTypes = [
-  { name: "Bike", detail: "Fastest for small parcels up to 5 kg" },
-  { name: "Scooty", detail: "Best for light packages and quick city drops" },
-  { name: "Auto", detail: "Useful for medium parcels and safer handling" },
-  { name: "Mini Cab", detail: "For fragile parcels or multiple small boxes" },
+  { name: "Bike 🏍", detail: "Fastest for small parcels up to 5 kg" },
+  { name: "Scooty 🛵", detail: "Best for light packages and quick city drops" },
+  { name: "Auto 🛺", detail: "Useful for medium parcels and safer handling" },
+  { name: "Mini Cab 🚕", detail: "For fragile parcels or multiple small boxes" },
+  { name: "Parcel Van 🚚", detail: "For fragile parcels or multiple small boxes" },
 ];
 
 export default function ParcelPage() {
   const [selectedVehicle, setSelectedVehicle] = useState("");
 
+  const [pickup, setPickup] = useState("");
+  const [drop, setDrop] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const [openPickupMap, setOpenPickupMap] = useState(false);
+  const [openDropMap, setOpenDropMap] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!pickup.trim()) return alert("Pickup location is required");
+    if (!drop.trim()) return alert("Drop location is required");
+    if (!selectedVehicle) return alert("Please select a vehicle");
+    if (!phone.trim()) return alert("Receiver phone number is required");
+    if (!/^\d{10}$/.test(phone)) return alert("Phone must be exactly 10 digits");
+
+    console.log({ pickup, drop, vehicle: selectedVehicle, phone });
+
+    alert("Parcel booking submitted successfully!");
+  };
+
   return (
     <div className="bg-[#fffdf3]">
-      <section className="py-[84px] bg-[#ffd232] max-[520px]:py-[54px] [&_h1]:max-w-[760px] [&_h1]:mt-[18px] [&_h1]:mb-0 [&_h1]:text-[clamp(42px,6vw,76px)] [&_h1]:leading-none [&_h1]:font-black [&_p]:max-w-[650px] [&_p]:mt-5 [&_p]:mb-0 [&_p]:text-[#242424] [&_p]:text-xl [&_p]:leading-[1.65]">
-        <div className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] grid grid-cols-[minmax(0,1.1fr)_minmax(280px,0.9fr)] gap-[42px] items-center max-[760px]:grid-cols-1">
-          <div>
-            <span className="w-fit rounded-full py-[10px] px-[18px] bg-[rgba(255,255,255,0.65)] text-[#0b0b0c] font-extrabold text-[13px] -translate-y-2 -mt-5 max-[520px]:py-2 max-[520px]:px-3 max-[520px]:text-[11px]">
-              Parcel delivery
-            </span>
-            <h1>Send parcels across the city with RealTimeCabs.</h1>
-            <p>
-              Choose parcel type, pickup and drop locations, then select the
-              right vehicle for quick delivery.
-            </p>
-          </div>
 
-          <div className="grid gap-[10px] rounded-[34px] p-[34px] bg-[#111] text-white shadow-[0_24px_50px_rgba(0,0,0,0.18)] [&_strong]:text-[#ffd232] [&_strong]:text-[28px] [&_span]:text-[#f5edcc]">
-            <strong>Live parcel booking</strong>
-            <span>Bike, Scooty, Auto and Mini options</span>
-          </div>
-        </div>
+      {/* HERO - FULL IMAGE (NO YELLOW) */}
+      <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-white">
+
+        {/* optional soft glow background */}
+        <div className="absolute w-[500px] h-[500px] bg-yellow-100/30 blur-3xl rounded-full"></div>
+
+        {/* BIG IMAGE */}
+        <img
+          src="/images/parcelbgimg.png"
+          alt="Parcel"
+          className="relative w-full h-full object-contain scale-110 drop-shadow-2xl"
+        />
+
       </section>
 
-      <section className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] grid grid-cols-[1.1fr_0.9fr] gap-[34px] py-[72px] max-[760px]:grid-cols-1 max-[520px]:py-11">
-        <form className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)] max-[760px]:p-7 max-[520px]:p-[22px] max-[520px]:rounded-3xl [&_h2]:m-0 [&_h2]:text-3xl [&_label]:grid [&_label]:gap-2 [&_label]:font-extrabold [&_input]:w-full [&_input]:border [&_input]:border-[#eadfbb] [&_input]:rounded-[18px] [&_input]:p-[15px_16px] [&_input]:bg-[#fffdf3] [&_input]:text-[#111] [&_select]:w-full [&_select]:border [&_select]:border-[#eadfbb] [&_select]:rounded-[18px] [&_select]:p-[15px_16px] [&_select]:bg-[#fffdf3] [&_select]:text-[#111] [&_textarea]:w-full [&_textarea]:border [&_textarea]:border-[#eadfbb] [&_textarea]:rounded-[18px] [&_textarea]:p-[15px_16px] [&_textarea]:bg-[#fffdf3] [&_textarea]:text-[#111] [&_textarea]:resize-y [&_button]:w-fit [&_button]:min-h-[54px] [&_button]:border-0 [&_button]:rounded-[18px] [&_button]:px-[34px] [&_button]:bg-[#111] [&_button]:text-white [&_button]:font-black [&_button]:cursor-pointer max-[520px]:[&_button]:w-full">
-          <h2>Book a parcel delivery</h2>
+      {/* FORM + VEHICLES (UNCHANGED) */}
+      <section className="mx-auto w-[min(1200px,calc(100%-40px))] grid grid-cols-[1.1fr_0.9fr] gap-[34px] py-[72px] max-[760px]:grid-cols-1">
 
-          <label>
+        {/* FORM */}
+        <form
+          onSubmit={handleSubmit}
+          className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)]"
+        >
+          <h2 className="text-3xl font-bold">Book a parcel delivery</h2>
+
+          <label className="grid gap-2 font-extrabold">
             Parcel Type
-            <select defaultValue="">
-              <option value="" disabled>
-                Select parcel type
-              </option>
+            <select className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]">
+              <option value="">Select parcel type</option>
               {parcelTypes.map((type) => (
                 <option key={type}>{type}</option>
               ))}
@@ -60,43 +83,100 @@ export default function ParcelPage() {
           </label>
 
           <div className="grid gap-6 grid-cols-2 max-[900px]:grid-cols-1">
-            <label>
+
+            <label className="grid gap-2 font-extrabold relative">
               Pickup Location
-              <input placeholder="Enter pickup address" />
+
+              <input
+                value={pickup}
+                onChange={(e) => setPickup(e.target.value)}
+                className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+                placeholder="Enter pickup address"
+              />
+
+              <button
+                type="button"
+                onClick={() => setOpenPickupMap(true)}
+                className="absolute right-4 top-[42px] text-[#F2B300] text-xl"
+              >
+                📍
+              </button>
+
+              {openPickupMap && (
+                <MapPicker
+                  onClose={() => setOpenPickupMap(false)}
+                  onSelect={(loc) => setPickup(loc)}
+                />
+              )}
             </label>
 
-            <label>
+            <label className="grid gap-2 font-extrabold relative">
               Drop Location
-              <input placeholder="Enter drop address" />
+
+              <input
+                value={drop}
+                onChange={(e) => setDrop(e.target.value)}
+                className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+                placeholder="Enter drop address"
+              />
+
+              <button
+                type="button"
+                onClick={() => setOpenDropMap(true)}
+                className="absolute right-4 top-[42px] text-[#F2B300] text-xl"
+              >
+                📍
+              </button>
+
+              {openDropMap && (
+                <MapPicker
+                  onClose={() => setOpenDropMap(false)}
+                  onSelect={(loc) => setDrop(loc)}
+                />
+              )}
             </label>
+
           </div>
 
-          <label>
+          <label className="grid gap-2 font-extrabold">
             Receiver Phone
-            <input placeholder="Enter receiver mobile number" />
-          </label>
-
-          <label>
-            Parcel Notes
-            <textarea
-              rows={4}
-              placeholder="Add instructions like fragile, call before delivery, etc."
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+              placeholder="Enter 10-digit mobile number"
             />
           </label>
 
-          <button type="submit">Continue Parcel Booking</button>
+          <label className="grid gap-2 font-extrabold">
+            Parcel Notes
+            <textarea
+              rows={4}
+              className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+              placeholder="Add instructions"
+            />
+          </label>
+
+          <button
+            type="submit"
+            className="w-fit min-h-[54px] px-[34px] rounded-[18px] bg-[#FFC72C] text-black font-black"
+          >
+            Confirm Parcel Booking
+          </button>
         </form>
 
-        <aside className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)] max-[760px]:p-7 max-[520px]:p-[22px] max-[520px]:rounded-3xl [&_h2]:m-0 [&_h2]:text-3xl">
-          <h2>Select vehicle</h2>
+        {/* VEHICLES */}
+        <aside className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)]">
+
+          <h2 className="text-3xl font-bold">Select vehicle</h2>
 
           <div className="grid gap-3.5">
             {vehicleTypes.map((vehicle) => (
               <button
-                type="button"
                 key={vehicle.name}
+                type="button"
                 onClick={() => setSelectedVehicle(vehicle.name)}
-                className={`grid gap-1.5 border rounded-[22px] p-[18px] text-left cursor-pointer transition ${
+                className={`grid gap-1.5 border rounded-[22px] p-[18px] text-left transition ${
                   selectedVehicle === vehicle.name
                     ? "border-[#ffd232] bg-[#F2B300]"
                     : "border-[#eadfbb] bg-[#fffdf3]"
@@ -107,7 +187,9 @@ export default function ParcelPage() {
               </button>
             ))}
           </div>
+
         </aside>
+
       </section>
     </div>
   );

@@ -1,77 +1,312 @@
+"use client";
+
+import axios from "axios";
+import { useState } from "react";
+
 export default function ContactPage() {
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobileNumber: "",
+    accountType: "",
+    queryType: "",
+    comment: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement |
+      HTMLSelectElement |
+      HTMLTextAreaElement
+    >
+  ) => {
+
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+
+  };
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+
+    e.preventDefault();
+
+    try {
+
+      setLoading(true);
+
+      const response = await axios.post(
+        "http://192.168.1.23:8081/contact",
+        formData
+      );
+
+      console.log(response.data);
+
+      alert("Query submitted successfully");
+
+      setFormData({
+        name: "",
+        email: "",
+        mobileNumber: "",
+        accountType: "",
+        queryType: "",
+        comment: "",
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Something went wrong");
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  };
+
   return (
     <div className="bg-[#fffdf3]">
-      <section className="py-[88px] bg-[#ffd232] text-[#111] max-[520px]:py-[54px] [&_h1]:max-w-[720px] [&_h1]:m-0 [&_h1]:text-[clamp(42px,6vw,72px)] [&_h1]:leading-none [&_h1]:font-black max-[520px]:[&_h1]:text-[34px] max-[520px]:[&_h1]:leading-[1.06] [&_p]:max-w-[650px] [&_p]:mt-[18px] [&_p]:mb-0 [&_p]:text-[#242424] [&_p]:text-xl [&_p]:leading-[1.6] max-[520px]:[&_p]:text-base max-[520px]:[&_p]:leading-[1.6]">
-        <div className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)]">
-          <h1>You can find us here</h1>
-          <p>Find help for your ride, driver account, payment, or safety queries.</p>
+
+      <section className="py-[88px] bg-[#ffd232] text-[#111] max-[520px]:py-[54px]">
+
+        <div className="mx-auto w-[min(1200px,calc(100%-40px))]">
+
+          <h1 className="max-w-[720px] text-[clamp(42px,6vw,72px)] leading-none font-black">
+            You can find us here
+          </h1>
+
+          <p className="max-w-[650px] mt-[18px] text-xl leading-[1.6]">
+            Find help for your ride, driver account,
+            payment, or safety queries.
+          </p>
+
         </div>
+
       </section>
 
-      <section className="mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] grid grid-cols-[1.1fr_0.9fr] gap-[52px] py-[72px] max-[1100px]:grid-cols-1 max-[760px]:grid-cols-1 max-[520px]:py-11 max-[520px]:gap-7">
-        <form className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)] max-[760px]:p-7 max-[520px]:p-[22px] max-[520px]:rounded-3xl [&_h2]:mt-0 [&_h2]:mb-2 [&_h2]:text-[26px] [&_label]:grid [&_label]:gap-2 [&_label]:font-bold [&_input]:w-full [&_input]:border [&_input]:border-[#eadfbb] [&_input]:rounded-[18px] [&_input]:p-[15px_16px] [&_input]:bg-[#fffdf3] [&_input]:text-[#111] [&_select]:w-full [&_select]:border [&_select]:border-[#eadfbb] [&_select]:rounded-[18px] [&_select]:p-[15px_16px] [&_select]:bg-[#fffdf3] [&_select]:text-[#111] [&_textarea]:w-full [&_textarea]:border [&_textarea]:border-[#eadfbb] [&_textarea]:rounded-[18px] [&_textarea]:p-[15px_16px] [&_textarea]:bg-[#fffdf3] [&_textarea]:text-[#111] [&_textarea]:resize-y [&_button]:w-fit [&_button]:min-h-[54px] [&_button]:border-0 [&_button]:rounded-[18px] [&_button]:px-[34px] [&_button]:bg-[#F2B300] [&_button]:text-black [&_button]:font-black [&_button]:cursor-pointer">
-          <h2>Find help for your queries here:</h2>
-          <label>
+      <section className="mx-auto w-[min(1200px,calc(100%-40px))] grid grid-cols-[1.1fr_0.9fr] gap-[52px] py-[72px] max-[1100px]:grid-cols-1">
+
+        <form
+          onSubmit={handleSubmit}
+          className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)]"
+        >
+
+          <h2 className="text-[26px]">
+            Find help for your queries here:
+          </h2>
+
+          <label className="grid gap-2 font-bold">
+
             Name *
-            <input placeholder="Enter your name" />
+
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Enter your name"
+              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              required
+            />
+
           </label>
-          <label>
+
+          <label className="grid gap-2 font-bold">
+
             Email Address *
-            <input type="email" placeholder="Enter your email" />
+
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              required
+            />
+
           </label>
-          <label>
+
+          <label className="grid gap-2 font-bold">
+
             Mobile Number *
-            <input placeholder="Enter your mobile number" />
+
+            <input
+              type="text"
+              name="mobileNumber"
+              value={formData.mobileNumber}
+              onChange={handleChange}
+              placeholder="Enter your mobile number"
+              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              required
+            />
+
           </label>
-          <label>
+
+          <label className="grid gap-2 font-bold">
+
             You are a *
-            <select defaultValue="">
+
+            <select
+              name="accountType"
+              value={formData.accountType}
+              onChange={handleChange}
+              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              required
+            >
+
               <option value="" disabled>
                 Select account type
               </option>
-              <option>Customer</option>
-              <option>Driver</option>
-              <option>Business partner</option>
+
+              <option value="Customer">
+                Customer
+              </option>
+
+              <option value="Driver">
+                Driver
+              </option>
+
+              <option value="Business Partner">
+                Business Partner
+              </option>
+
             </select>
+
           </label>
-          <label>
+
+          <label className="grid gap-2 font-bold">
+
             Select Query *
-            <select defaultValue="">
+
+            <select
+              name="queryType"
+              value={formData.queryType}
+              onChange={handleChange}
+              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              required
+            >
+
               <option value="" disabled>
                 Select query
               </option>
-              <option>Ride booking</option>
-              <option>Payment issue</option>
-              <option>Driver onboarding</option>
-              <option>Safety support</option>
+
+              <option value="Ride Booking">
+                Ride Booking
+              </option>
+
+              <option value="Payment Issue">
+                Payment Issue
+              </option>
+
+              <option value="Driver Onboarding">
+                Driver Onboarding
+              </option>
+
+              <option value="Safety Support">
+                Safety Support
+              </option>
+
             </select>
+
           </label>
-          <label>
+
+          <label className="grid gap-2 font-bold">
+
             Comment *
-            <textarea placeholder="Write your message" rows={5} />
+
+            <textarea
+              rows={5}
+              name="comment"
+              value={formData.comment}
+              onChange={handleChange}
+              placeholder="Write your message"
+              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3] resize-y"
+              required
+            />
+
           </label>
-          <button type="submit">Submit</button>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-fit min-h-[54px] rounded-[18px] px-[34px] bg-[#F2B300] text-black font-black cursor-pointer"
+          >
+
+            {loading ? "Submitting..." : "Submit"}
+
+          </button>
+
         </form>
 
-        <aside className="grid gap-6 content-start rounded-[34px] p-9 bg-[#111] text-white shadow-[0_18px_44px_rgba(0,0,0,0.08)] max-[760px]:p-7 max-[520px]:p-[22px] max-[520px]:rounded-3xl [&_h3]:mt-0 [&_h3]:mb-[10px] [&_h3]:text-[#ffd232] [&_h3]:text-lg [&_p]:m-0 [&_p]:text-[#f5edcc] [&_p]:leading-[1.7]">
+        <aside className="grid gap-6 content-start rounded-[34px] p-9 bg-[#111] text-white shadow-[0_18px_44px_rgba(0,0,0,0.08)]">
+
           <div>
-            <h3>Registered Office Address:</h3>
-            <p>RealTimeCabs Mobility Pvt Ltd, 3rd Floor, City Arcade, HSR Layout, Bangalore - 560102.</p>
+            <h3 className="text-[#ffd232] text-lg">
+              Registered Office Address:
+            </h3>
+
+            <p className="text-[#f5edcc] leading-[1.7]">
+              RealTimeCabs Mobility Pvt Ltd,
+              3rd Floor, City Arcade,
+              HSR Layout, Bangalore - 560102.
+            </p>
           </div>
+
           <div>
-            <h3>City Office:</h3>
-            <p>RealTimeCabs Support Center, MG Road, Bengaluru, Karnataka - 560001.</p>
+            <h3 className="text-[#ffd232] text-lg">
+              City Office:
+            </h3>
+
+            <p className="text-[#f5edcc] leading-[1.7]">
+              RealTimeCabs Support Center,
+              MG Road, Bengaluru,
+              Karnataka - 560001.
+            </p>
           </div>
+
           <div>
-            <h3>Corporate Office:</h3>
-            <p>RealTimeCabs Tower, Outer Ring Road, Bellandur, Bengaluru, Karnataka - 560103.</p>
+            <h3 className="text-[#ffd232] text-lg">
+              Corporate Office:
+            </h3>
+
+            <p className="text-[#f5edcc] leading-[1.7]">
+              RealTimeCabs Tower,
+              Outer Ring Road, Bellandur,
+              Bengaluru, Karnataka - 560103.
+            </p>
           </div>
-          <div className="flex flex-wrap gap-3.5 max-[520px]:w-full [&_a]:inline-flex [&_a]:items-center [&_a]:justify-center [&_a]:min-h-[54px] [&_a]:rounded-full [&_a]:px-6 [&_a]:bg-[#ffd232] [&_a]:text-[#111] [&_a]:font-extrabold max-[520px]:[&_a]:w-full">
-            <a href="/signin?mode=login&role=user">Customer app</a>
-            <a href="/signin?mode=login&role=driver">Captain app</a>
+
+          <div className="flex flex-wrap gap-3.5">
+
+            <a
+              href="/signin?mode=login&role=user"
+              className="inline-flex items-center justify-center min-h-[54px] rounded-full px-6 bg-[#ffd232] text-[#111] font-extrabold"
+            >
+              Customer app
+            </a>
+
+            <a
+              href="/signin?mode=login&role=driver"
+              className="inline-flex items-center justify-center min-h-[54px] rounded-full px-6 bg-[#ffd232] text-[#111] font-extrabold"
+            >
+              Captain app
+            </a>
+
           </div>
+
         </aside>
+
       </section>
+
     </div>
   );
 }

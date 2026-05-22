@@ -77,7 +77,7 @@ export function SearchRideBox() {
   };
 
   // =========================
-  // BOOK RIDE (FIXED)
+  // BOOK RIDE
   // =========================
   const handleBookRide = async () => {
     if (!pickup.trim() || !drop.trim()) {
@@ -88,6 +88,12 @@ export function SearchRideBox() {
     try {
       setLoading(true);
 
+      console.log("BOOK BUTTON CLICKED");
+
+      const token = localStorage.getItem("token");
+
+      console.log("TOKEN:", token);
+
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000);
 
@@ -96,26 +102,43 @@ export function SearchRideBox() {
         drop: drop.trim(),
       };
 
+      console.log("Sending payload:", payload);
+
       const res = await axios.post(
         "http://192.168.1.23:8081/rides/book",
         payload,
         {
+          headers: {
+            // Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
           signal: controller.signal,
         }
       );
 
       clearTimeout(timeout);
 
-      console.log("Backend Response:", res.data);
+      console.log("SUCCESS:", res.data);
 
       alert("🚕 Ride booked successfully!");
     } catch (error: any) {
-      console.error("Booking error:", error);
+      console.error("FULL ERROR:", error);
 
-      if (error.name === "CanceledError" || error.name === "AbortError") {
+      if (error.response) {
+        console.log("ERROR DATA:", error.response.data);
+        console.log("ERROR STATUS:", error.response.status);
+
+        alert(
+          error.response.data?.message ||
+            "❌ Failed to book ride"
+        );
+      } else if (
+        error.name === "CanceledError" ||
+        error.name === "AbortError"
+      ) {
         alert("⏱ Request timeout. Server not responding.");
       } else {
-        alert("❌ Failed to book ride (check backend)");
+        alert("❌ Network or server error");
       }
     } finally {
       setLoading(false);

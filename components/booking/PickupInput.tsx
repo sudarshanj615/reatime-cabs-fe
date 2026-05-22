@@ -1,3 +1,37 @@
+"use client";
+
+import { useState } from "react";
+import { MapPicker } from "../MapPicker";
+
 export function PickupInput() {
-  return <input className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full" placeholder="Pickup location" />;
+  const [value, setValue] = useState("");
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="relative w-full">
+
+      <input
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Pickup location"
+        className="w-full min-h-[54px] rounded-[10px] border border-[#eadfbb] bg-white/20 px-3 text-[#080808] outline-none focus:border-[#F2B300] focus:ring-2 focus:ring-yellow-200"
+      />
+
+      {/* MAP BUTTON */}
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F2B300] text-xl"
+      >
+        📍
+      </button>
+
+      {open && (
+        <MapPicker
+          onClose={() => setOpen(false)}
+          onSelect={(loc) => setValue(loc)}
+        />
+      )}
+    </div>
+  );
 }
