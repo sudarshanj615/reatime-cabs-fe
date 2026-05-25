@@ -9,13 +9,13 @@ type Mode = "login" | "signup";
 
 const endpoints = {
   user: {
-    login: "http://192.168.1.4:8081/users/login",
-    signup: "http://192.168.1.4:8081/users/signup",
+    login: "http://192.168.1.23:8081/users/login",
+    signup: "http://192.168.1.23:8081/users/signup",
   },
 
   driver: {
-    login: "http://192.168.1.4:8081/drivers/login",
-    signup: "http://192.168.1.4:8081/drivers/signup",
+    login: "http://192.168.1.23:8081/drivers/login",
+    signup: "http://192.168.1.23:8081/drivers/signup",
   },
 };
 
