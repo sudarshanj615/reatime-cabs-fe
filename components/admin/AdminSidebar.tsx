@@ -31,7 +31,7 @@ export default function AdminSidebar() {
           <span>Admin console</span>
         </Link>
 
-        <nav className="flex flex-col gap-2 max-[900px]:flex-row max-[900px]:flex-wrap [&_.sidebar-link]:rounded-[10px] [&_.sidebar-link]:px-4 [&_.sidebar-link]:py-3 [&_.sidebar-link]:font-medium [&_.sidebar-link]:text-[#d1d5db] [&_.sidebar-link]:no-underline [&_.sidebar-link]:transition [&_.sidebar-link]:duration-200 [&_.sidebar-link]:ease-in [&_.sidebar-link:hover]:bg-[rgba(165,149,149,0.08)] [&_.sidebar-link:hover]:text-white max-[900px]:[&_.sidebar-link]:text-sm [&_.active]:bg-[#2563eb] [&_.active]:text-white">
+        <nav className="flex flex-col gap-2 max-[900px]:flex-row max-[900px]:flex-wrap [&_.sidebar-link]:rounded-[10px] [&_.sidebar-link]:px-4 [&_.sidebar-link]:py-3 [&_.sidebar-link]:font-medium [&_.sidebar-link]:text-[#d1d5db] [&_.sidebar-link]:no-underline [&_.sidebar-link]:transition [&_.sidebar-link]:duration-200 [&_.sidebar-link]:ease-in [&_.sidebar-link:hover]:bg-bg-[#FFC72C] [&_.sidebar-link:hover]:text-white max-[900px]:[&_.sidebar-link]:text-sm [&_.active]:bg-[#FFC72C] [&_.active]:!text-black ">
           {links.map((link) => (
             <Link
               key={link.path}
@@ -46,7 +46,7 @@ export default function AdminSidebar() {
         </nav>
       </div>
 
-      <button  onClick={() => (window.location.href = "/")} className="border-0 bg-[#5a584f] text-white py-3 px-4 rounded-[10px] cursor-pointer font-semibold transition duration-200 ease-in hover:bg-[#ffc836] hover:text-black">Logout</button>
+      <button  onClick={() => (window.location.href = "/")} className="border-0 bg-[#ffc836] text-black py-3 px-4 rounded-[10px] cursor-pointer font-semibold transition duration-200 ease-in hover:bg-[#dc2626] hover:text-white">Logout</button>
     </aside>
   );
 }

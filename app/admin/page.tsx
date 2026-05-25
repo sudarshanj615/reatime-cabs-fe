@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function AdminDashboard() {
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard min-h-screen bg-[#fffdf3] px-6 py-6">
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-7 gap-5 max-[768px]:flex-col max-[768px]:items-start [&>h1]:text-[30px] [&>h1]:font-bold [&>h1]:text-[#111827]">
@@ -12,11 +12,13 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-4 flex-wrap max-[768px]:w-full">
 
           {/* CREATE ACCOUNT BUTTON */}
+
           <Link href="/admin/users/create">
             <button className="border-0 outline-none cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#facc15] text-black font-semibold transition duration-200 ease-in hover:bg-[#eab308] hover:-translate-y-px">
               Create New Account
             </button>
           </Link>
+          
 
           {/* CREATE RIDE BUTTON */}
           <Link href="/admin/rides/create">

@@ -106,10 +106,10 @@ export default function ParcelPage() {
     <div className="bg-[#fffdf3]">
 
       {/* HERO - FULL IMAGE (NO YELLOW) */}
-      <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden bg-white">
+      <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden  bg-[#fffdf3]">
 
         {/* optional soft glow background */}
-        <div className="absolute w-[500px] h-[500px] bg-yellow-100/30 blur-3xl rounded-full"></div>
+        <div className="absolute w-[500px] h-[500px]  bg-[#fffdf3] blur-3xl rounded-full"></div>
 
         {/* BIG IMAGE */}
         <img

@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { FormEvent, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function CreateUserPage() {
   const [loading, setLoading] = useState(false);
@@ -19,7 +20,6 @@ export default function CreateUserPage() {
       phone: formData.get("phone"),
       email: formData.get("email"),
       password: formData.get("password"),
-      //confirmPassword: formData.get("confirmPassword"),
     };
 
     try {
@@ -32,29 +32,53 @@ export default function CreateUserPage() {
 
       console.log(response.data);
 
-      setMessage("Customer account created successfully");
+      setMessage("Customer account created successfully!");
+
+      Swal.fire({
+        icon: "success",
+        title: "Account Created",
+        text: "Customer account created successfully!",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
+
+      // reset form
+      e.currentTarget.reset();
+
     } catch (error: any) {
       console.log(error);
 
-      setMessage(
+      const errorMessage =
         error?.response?.data?.message ||
-          "Something went wrong"
-      );
+        "Failed to create customer account. Please try again.";
+
+      setMessage(errorMessage);
+
+      Swal.fire({
+        icon: "error",
+        title: "Creation Failed",
+        text: errorMessage,
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
+
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-8 flex flex-col gap-8">
+    <div className="p-8 flex flex-col gap-8 bg-[#fffdf3] min-h-screen">
 
       {/* Header */}
-      <div>
-        <h1 className="text-4xl font-extrabold text-black">
+      <div >
+        <h1 className="text-4xl font-extrabold text-black text-center">
           Create Customer Account
         </h1>
 
-        <p className="mt-2 text-gray-500 text-base">
+        <p className="mt-2 text-gray-500 text-base text-center">
           Create accounts on behalf of customers
         </p>
       </div>
@@ -62,7 +86,7 @@ export default function CreateUserPage() {
       {/* Form Card */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-3xl shadow-lg p-8 max-w-3xl grid gap-6 border border-gray-100"
+        className="bg-white rounded-3xl shadow-lg p-8 max-w-3xl w-full mx-auto grid gap-6 border border-gray-100"
       >
 
         {/* Full Name */}
@@ -125,26 +149,11 @@ export default function CreateUserPage() {
           />
         </div>
 
-        {/* Confirm Password */}
-        {/* <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-gray-800">
-            Confirm Password
-          </label>
-
-          <input
-            type="password"
-            name="confirmPassword"
-            required
-            placeholder="Confirm password"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-100 transition"
-          />
-        </div> */}
-
         {/* Message */}
         {message && (
           <div
             className={`rounded-xl px-4 py-3 text-sm font-semibold ${
-              message.toLowerCase().includes("wrong") ||
+              message.toLowerCase().includes("failed") ||
               message.toLowerCase().includes("error")
                 ? "bg-red-100 text-red-600"
                 : "bg-green-100 text-green-700"
@@ -154,7 +163,7 @@ export default function CreateUserPage() {
           </div>
         )}
 
-        {/* Button */}
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}

@@ -97,7 +97,7 @@ export default function DriversPage() {
   };
 
   return (
-    <div>
+    <div className="drivers-page min-h-screen bg-[#fffdf3] px-6 py-6">
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-7 gap-5 max-[768px]:flex-col max-[768px]:items-start [&>h1]:text-[30px] [&>h1]:font-bold [&>h1]:text-[#111827]">
@@ -115,6 +115,7 @@ export default function DriversPage() {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* FILTER BOX */}
       <div className="bg-white border border-[#e5e7eb] rounded-[16px] p-5 shadow-[0_4px_12px_rgba(0,0,0,0.04)] mb-6">
 
@@ -237,6 +238,54 @@ export default function DriversPage() {
       <div className="bg-white rounded-[14px] p-[22px] shadow-[0_4px_10px_rgba(0,0,0,0.04)] border border-[#e5e7eb] overflow-x-auto">
 
         <table className="w-full border-collapse min-w-[900px] [&_thead]:bg-[#f9fafb] [&_th]:text-left [&_th]:p-[15px] [&_th]:text-sm [&_th]:text-[#6b7280] [&_th]:border-b [&_th]:border-[#e5e7eb] [&_td]:p-[16px_15px] [&_td]:border-b [&_td]:border-[#f3f4f6] [&_td]:text-[#374151] [&_td]:text-sm [&_tr:hover]:bg-[#fafafa] [&_.status]:py-1.5 [&_.status]:px-3 [&_.status]:rounded-full [&_.status]:text-xs [&_.status]:font-semibold [&_.online]:bg-[#dcfce7] [&_.online]:text-[#16a34a] [&_.busy]:bg-[#dbeafe] [&_.busy]:text-[#0284c7] [&_.offline]:bg-[#e5e7eb] [&_.offline]:text-[#4b5563]">
+=======
+      {/* SEARCH */}
+     <div className="bg-white rounded-[16px] border border-[#f0e6c2] shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-5 mb-6">
+
+  <div className="flex flex-wrap gap-3.5 items-center">
+
+    <input
+      className="border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 bg-white text-sm w-full min-w-[180px] transition duration-200 ease-in focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
+      placeholder="Search drivers..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+
+    <select
+      className="border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 bg-white text-sm w-full min-w-[180px] transition duration-200 ease-in focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
+      value={statusFilter}
+      onChange={(e) => setStatusFilter(e.target.value)}
+    >
+      <option>All Status</option>
+      <option>Online</option>
+      <option>Offline</option>
+      <option>Busy</option>
+    </select>
+
+    <select
+      className="border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 bg-white text-sm w-full min-w-[180px] transition duration-200 ease-in focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
+      value={verificationFilter}
+      onChange={(e) => setVerificationFilter(e.target.value)}
+    >
+      <option>All Verification</option>
+      <option>Verified</option>
+      <option>Pending</option>
+    </select>
+
+    <button
+      className="border-0 outline-none cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#111827] text-white font-semibold transition duration-200 ease-in hover:bg-black hover:-translate-y-px"
+      type="button"
+      onClick={clearFilters}
+    >
+      Clear
+    </button>
+
+  </div>
+</div>
+
+      {/* TABLE */}
+      <div className="bg-white rounded-[14px] p-[22px] shadow-[0_4px_10px_rgba(0,0,0,0.04)] border border-[#e5e7eb] ">
+>>>>>>> a20c86e (admin changes)
 
           <thead>
 

@@ -62,7 +62,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div>
+    <div className="settings-page min-h-screen bg-[#fffdf3] px-6 py-6">
       <div className="flex justify-between items-center mb-7 gap-5 max-[768px]:flex-col max-[768px]:items-start [&>h1]:text-[30px] [&>h1]:font-bold [&>h1]:text-[#111827]">
         <div>
           <h1>Settings</h1>
