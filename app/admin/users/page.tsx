@@ -92,20 +92,6 @@ export default function UsersPage() {
     <div className="users-page  min-h-screen bg-[#fffdf3] px-6 py-6">
 
       {/* HEADER */}
-<<<<<<< HEAD
-      <div className="flex justify-between items-center mb-7 gap-5 max-[768px]:flex-col max-[768px]:items-start">
-
-        <h1 className="text-[30px] font-bold text-[#111827]">
-          Users
-        </h1>
-
-        <div className="flex items-center gap-4">
-
-          <button className="border-0 outline-none cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#2563eb] text-white font-semibold transition duration-200 ease-in hover:bg-[#1d4ed8] hover:-translate-y-px">
-            Export Users
-          </button>
-
-=======
       
       <div className="flex justify-between items-center mb-7 gap-5 max-[768px]:flex-col max-[768px]:items-start [&>h1]:text-[30px] [&>h1]:font-bold [&>h1]:text-[#111827]">
         <h1>Users</h1>
@@ -113,128 +99,11 @@ export default function UsersPage() {
       
         <div className="flex items-center gap-4 max-[768px]:w-full max-[768px]:justify-between">
           <button className="border-0 outline-none cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#2563eb] text-white font-semibold transition duration-200 ease-in hover:bg-[#1d4ed8] hover:-translate-y-px">Export Users</button>
->>>>>>> a20c86e (admin changes)
           <div className="w-[42px] h-[42px] rounded-full bg-[linear-gradient(135deg,#2563eb,#60a5fa)]" />
 
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* FILTER BOX */}
-      <div className="bg-white border border-[#e5e7eb] rounded-[16px] p-5 shadow-[0_4px_12px_rgba(0,0,0,0.05)] mb-6">
-
-        <div className="flex items-center justify-between mb-5 max-[768px]:flex-col max-[768px]:items-start gap-3">
-
-          <div>
-            <h2 className="text-lg font-bold text-[#111827]">
-              Filter Bar
-            </h2>
-
-            <p className="text-sm text-[#6b7280] mt-1">
-              Search and filter users
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="border-0 outline-none cursor-pointer py-[10px] px-[16px] rounded-[10px] bg-[#111827] text-white text-sm font-semibold hover:bg-black transition"
-          >
-            Clear Filters
-          </button>
-
-        </div>
-
-        {/* FILTER ROW */}
-        <div className="grid grid-cols-3 gap-4 max-[900px]:grid-cols-1">
-
-          {/* SEARCH */}
-          <div className="flex flex-col gap-2">
-
-            <label className="text-sm font-semibold text-[#374151]">
-              Search
-            </label>
-
-            <input
-              className="border border-[#e5e7eb] rounded-[12px] py-3 px-4 bg-[#fafafa] text-sm transition duration-200 ease-in focus:outline-none focus:border-[#2563eb] focus:bg-white focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
-              placeholder="Search users..."
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-            />
-
-          </div>
-
-          {/* ROLE FILTER */}
-          <div className="flex flex-col gap-2">
-
-            <label className="text-sm font-semibold text-[#374151]">
-              All Roles
-            </label>
-
-            <select
-              className="border border-[#e5e7eb] rounded-[12px] py-3 px-4 bg-[#fafafa] text-sm transition duration-200 ease-in focus:outline-none focus:border-[#2563eb] focus:bg-white focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
-              value={roleFilter}
-              onChange={(e) =>
-                setRoleFilter(
-                  e.target.value
-                )
-              }
-            >
-              <option>
-                All Roles
-              </option>
-
-              <option>
-                Customer
-              </option>
-
-              <option>
-                Driver
-              </option>
-            </select>
-
-          </div>
-
-          {/* STATUS FILTER */}
-          <div className="flex flex-col gap-2">
-
-            <label className="text-sm font-semibold text-[#374151]">
-              All Status
-            </label>
-
-            <select
-              className="border border-[#e5e7eb] rounded-[12px] py-3 px-4 bg-[#fafafa] text-sm transition duration-200 ease-in focus:outline-none focus:border-[#2563eb] focus:bg-white focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
-              value={statusFilter}
-              onChange={(e) =>
-                setStatusFilter(
-                  e.target.value
-                )
-              }
-            >
-              <option>
-                All Status
-              </option>
-
-              <option>
-                Active
-              </option>
-
-              <option>
-                Blocked
-              </option>
-
-              <option>
-                Inactive
-              </option>
-            </select>
-
-          </div>
-
-        </div>
-      </div>
-=======
       {/* FILTER BAR */}
      <div className="bg-white rounded-[16px] border border-[#f0e6c2] shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-5 mb-6">
 
@@ -270,7 +139,6 @@ export default function UsersPage() {
 
   </div>
 </div>
->>>>>>> a20c86e (admin changes)
 
       {/* TABLE */}
       <div className="bg-white rounded-[14px] p-[22px] shadow-[0_4px_10px_rgba(0,0,0,0.04)] border border-[#e5e7eb] overflow-x-auto">

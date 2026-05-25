@@ -78,8 +78,9 @@ export default function AdminCreateRidePage() {
 
             <PickupInput
               value={pickup}
-              onChange={setPickup}
-            />
+              onChange={setPickup} setCoordinates={function (coords: { lat: number; lng: number; }): void {
+                throw new Error("Function not implemented.");
+              } }            />
           </div>
 
           {/* Drop */}
@@ -90,8 +91,9 @@ export default function AdminCreateRidePage() {
 
             <DropInput
               value={drop}
-              onChange={setDrop}
-            />
+              onChange={setDrop} setCoordinates={function (coords: { lat: number; lng: number; }): void {
+                throw new Error("Function not implemented.");
+              } }            />
           </div>
 
         </div>
