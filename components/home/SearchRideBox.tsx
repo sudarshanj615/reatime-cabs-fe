@@ -1,182 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-
-type Suggestion = {
-  display_name: string;
-  lat: string;
-  lon: string;
-};
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function SearchRideBox() {
+  const router = useRouter();
+
   const [pickup, setPickup] = useState("");
   const [drop, setDrop] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const [pickupSuggestions, setPickupSuggestions] = useState<Suggestion[]>([]);
-
-  // =========================
-  // LOCATION SUGGESTIONS
-  // =========================
-  const fetchSuggestions = async (query: string) => {
-    if (!query || query.length < 3) {
-      setPickupSuggestions([]);
+  const handleSearch = () => {
+    if (!pickup || !drop) {
+      alert("Please enter pickup and drop location");
       return;
     }
 
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          query
-        )}&limit=5`
-      );
-
-      const data = await response.json();
-      setPickupSuggestions(data);
-    } catch (err) {
-      console.error("Suggestion fetch failed:", err);
-    }
+    router.push("/dashboard/user/book-ride");
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      fetchSuggestions(pickup);
-    }, 400);
-
-    return () => clearTimeout(timeout);
-  }, [pickup]);
-
-  // =========================
-  // CURRENT LOCATION
-  // =========================
-  const getCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation not supported");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-
-      try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-        );
-
-        const data = await response.json();
-
-        if (data?.display_name) {
-          setPickup(data.display_name);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    });
-  };
-
-  // =========================
-  // BOOK RIDE
-  // =========================
-  const handleBookRide = async () => {
-    if (!pickup.trim() || !drop.trim()) {
-      alert("⚠️ Please enter both pickup and drop location");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      console.log("BOOK BUTTON CLICKED");
-
-      const token = localStorage.getItem("token");
-
-      console.log("TOKEN:", token);
-
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
-
-      const payload = {
-        pickup: pickup.trim(),
-        drop: drop.trim(),
-      };
-
-      console.log("Sending payload:", payload);
-
-      const res = await axios.post(
-        "http://192.168.1.23:8081/rides/book",
-        payload,
-        {
-          headers: {
-            // Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          signal: controller.signal,
-        }
-      );
-
-      clearTimeout(timeout);
-
-      console.log("SUCCESS:", res.data);
-
-      alert("🚕 Ride booked successfully!");
-    } catch (error: any) {
-      console.error("FULL ERROR:", error);
-
-      if (error.response) {
-        console.log("ERROR DATA:", error.response.data);
-        console.log("ERROR STATUS:", error.response.status);
-
-        alert(
-          error.response.data?.message ||
-            "❌ Failed to book ride"
-        );
-      } else if (
-        error.name === "CanceledError" ||
-        error.name === "AbortError"
-      ) {
-        alert("⏱ Request timeout. Server not responding.");
-      } else {
-        alert("❌ Network or server error");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // =========================
-  // UI
-  // =========================
   return (
-    <div className="mt-[-205px] grid grid-cols-[1fr_1fr_auto] gap-3.5 rounded-[30px] p-3.5 bg-[rgba(255,255,255,0.35)] backdrop-blur-[18px] shadow-[0_22px_50px_rgba(16,16,16,0.16)] border border-[rgba(255,255,255,0.4)] max-[900px]:grid-cols-1">
+    <div className="flex justify-center items-top -mt-90">
+      <div className="flex gap-3 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg">
 
-      {/* PICKUP */}
-      <div className="relative w-full">
         <input
-          placeholder="Enter pickup location"
           value={pickup}
           onChange={(e) => setPickup(e.target.value)}
-          className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808]"
+          placeholder="Pickup location"
+          className="border border-white/40 bg-transparent text-black placeholder:text-gray-300 p-3 rounded-lg outline-none focus:border-yellow-400"
         />
+
+        <input
+          value={drop}
+          onChange={(e) => setDrop(e.target.value)}
+          placeholder="Drop location"
+          className="border border-white/40 bg-transparent text-black placeholder:text-gray-300 p-3 rounded-lg outline-none focus:border-yellow-400"
+        />
+
+        <button
+          onClick={handleSearch}
+          className="bg-yellow-400 hover:bg-yellow-500 transition px-5 py-3 rounded-lg font-bold text-black"
+        >
+          Search Ride
+        </button>
+
       </div>
-
-      {/* DROP */}
-      <input
-        className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808]"
-        placeholder="Enter drop location"
-        value={drop}
-        onChange={(e) => setDrop(e.target.value)}
-      />
-
-      {/* BOOK BUTTON */}
-      <button
-        onClick={handleBookRide}
-        disabled={loading}
-        className="inline-flex items-center justify-center gap-2 min-h-[52px] border-0 rounded-[10px] p-[10px] bg-[#F2B300] text-[#0a0101] font-bold cursor-pointer transition duration-300 shadow-[0_8px_18px_rgba(248,189,16,0.28)] disabled:opacity-60"
-      >
-        {loading ? "Booking..." : "Book Now"}
-      </button>
     </div>
   );
 }

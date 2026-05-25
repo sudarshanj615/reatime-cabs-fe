@@ -1,9 +1,56 @@
-import Link from "next/link";
+"use client";
 
-export function ConfirmRideButton() {
+import axios from "axios";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+type Props = {
+  pickup: string;
+  drop: string;
+};
+
+export function ConfirmRideButton({ pickup, drop }: Props) {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleBookRide = async () => {
+    if (!pickup || !drop) {
+      alert("Please enter pickup and drop");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await axios.post(
+        "http://192.168.1.23:8081/rides/book",
+        {
+          pickup,
+          drop,
+        }
+      );
+
+      console.log("Ride booked:", res.data);
+
+      alert("Ride booked successfully!");
+
+      router.push("/ride/success");
+
+    } catch (err) {
+      console.error(err);
+      alert("Booking failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <Link className="inline-flex items-center justify-center gap-2 min-h-[52px] border-0 rounded-[10px] p-[10px] bg-[#F2B300] text-[#0a0101] font-bold cursor-pointer mt-[10px] transition duration-300 shadow-[0_8px_18px_rgba(248,189,16,0.28)] max-[520px]:w-full disabled:cursor-default disabled:opacity-70" href="/ride/success">
-      Confirm Ride
-    </Link>
+    <button
+      onClick={handleBookRide}
+      disabled={loading}
+      className="inline-flex items-center justify-center min-h-[52px] rounded-[10px] bg-[#F2B300] px-4 font-bold text-black"
+    >
+      {loading ? "Booking..." : "Confirm Ride"}
+    </button>
   );
 }

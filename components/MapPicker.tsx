@@ -11,7 +11,9 @@ type Props = {
 
 export function MapPicker({ onSelect, onClose }: Props) {
   const mapRef = useRef<HTMLDivElement | null>(null);
-  const [center, setCenter] = useState<[number, number]>([77.209, 28.6139]);
+  const [center, setCenter] = useState<[number, number]>([
+    77.209, 28.6139,
+  ]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -23,7 +25,8 @@ export function MapPicker({ onSelect, onClose }: Props) {
       container: mapRef.current,
       style: {
         version: 8,
-        glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+        glyphs:
+          "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
         sources: {
           esri: {
             type: "raster",
@@ -44,6 +47,11 @@ export function MapPicker({ onSelect, onClose }: Props) {
       center,
       zoom: 14,
     });
+
+    // ✅ IMPORTANT FIX: force resize after modal open
+    setTimeout(() => {
+      map.resize();
+    }, 200);
 
     map.on("move", () => {
       const c = map.getCenter();
@@ -74,13 +82,14 @@ export function MapPicker({ onSelect, onClose }: Props) {
 
       <div className="w-[92%] max-w-3xl rounded-2xl overflow-hidden bg-white shadow-2xl">
 
-        {/* MAP */}
+        {/* MAP CONTAINER */}
         <div ref={mapRef} className="relative h-[420px] w-full">
 
-          {/* CENTER PIN */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-full text-[#F2B300] text-3xl pointer-events-none">
+          {/* CENTER PIN (ALWAYS VISIBLE) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-full text-[#F2B300] text-3xl pointer-events-none z-50">
             📍
           </div>
+
         </div>
 
         {/* ACTION BAR */}
@@ -99,6 +108,7 @@ export function MapPicker({ onSelect, onClose }: Props) {
           >
             Select Location
           </button>
+
         </div>
 
       </div>
