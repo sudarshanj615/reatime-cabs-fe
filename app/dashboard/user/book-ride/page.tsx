@@ -15,10 +15,22 @@ export default function BookRidePage() {
   const [pickup, setPickup] = useState("");
   const [drop, setDrop] = useState("");
 
+  const [pickupCoords, setPickupCoords] =
+    useState({
+      lat: 0,
+      lng: 0,
+    });
+
+  const [dropCoords, setDropCoords] =
+    useState({
+      lat: 0,
+      lng: 0,
+    });
+
   return (
     <div className="py-16 max-[520px]:py-10 mx-auto w-[min(1200px,calc(100%-40px))] grid gap-[18px]">
 
-      <PageHeader 
+      <PageHeader
         title="Book Ride"
         description="Choose pickup, drop, and cab type for your trip."
       />
@@ -30,17 +42,17 @@ export default function BookRidePage() {
 
         {/* ✅ FIXED INPUTS */}
         <div className="grid gap-6 grid-cols-2 max-[900px]:grid-cols-1">
-
           <PickupInput
             value={pickup}
             onChange={setPickup}
+            setCoordinates={setPickupCoords}
           />
 
           <DropInput
             value={drop}
             onChange={setDrop}
+            setCoordinates={setDropCoords}  
           />
-
         </div>
 
         <CabSelector />

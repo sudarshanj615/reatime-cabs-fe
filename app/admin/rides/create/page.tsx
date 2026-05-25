@@ -42,7 +42,7 @@ export default function AdminCreateRidePage() {
 
       setMessage(
         error?.response?.data?.message ||
-          "Failed to create ride"
+        "Failed to create ride"
       );
     } finally {
       setLoading(false);
@@ -50,11 +50,11 @@ export default function AdminCreateRidePage() {
   };
 
   return (
-    <div className="p-8 flex flex-col gap-8">
+    <div className="min-h-screen bg-[#fafafa] p-8 flex flex-col gap-8">
 
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-extrabold text-black">
+        <h1 className="text-4xl font-extrabold text-black tracking-tight">
           Create Ride
         </h1>
 
@@ -66,7 +66,7 @@ export default function AdminCreateRidePage() {
       {/* Form Card */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-3xl shadow-lg p-8 max-w-4xl grid gap-6 border border-gray-100"
+        className="bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.06)] p-8 max-w-4xl grid gap-7 border border-[#f3f3f3]"
       >
 
         {/* Search Bar */}
@@ -93,7 +93,9 @@ export default function AdminCreateRidePage() {
               Pickup Location
             </label>
 
-            <PickupInput />
+            <div className="rounded-2xl border border-gray-300 focus-within:border-yellow-400 focus-within:ring-4 focus-within:ring-yellow-100 transition overflow-hidden">
+              <PickupInput />
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -101,7 +103,9 @@ export default function AdminCreateRidePage() {
               Drop Location
             </label>
 
-            <DropInput />
+            <div className="rounded-2xl border border-gray-300 focus-within:border-yellow-400 focus-within:ring-4 focus-within:ring-yellow-100 transition overflow-hidden">
+              <DropInput />
+            </div>
           </div>
 
         </div>
@@ -109,25 +113,20 @@ export default function AdminCreateRidePage() {
         {/* Message */}
         {message && (
           <div
-            className={`rounded-xl px-4 py-3 text-sm font-semibold ${
-              message.toLowerCase().includes("failed") ||
-              message.toLowerCase().includes("error")
+            className={`rounded-2xl px-4 py-3 text-sm font-semibold ${message.toLowerCase().includes("failed") ||
+                message.toLowerCase().includes("error")
                 ? "bg-red-100 text-red-600"
                 : "bg-green-100 text-green-700"
-            }`}
+              }`}
           >
             {message}
           </div>
         )}
 
         {/* Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="disabled:opacity-60"
-        >
+        <div className="w-full">
           <ConfirmRideButton />
-        </button>
+        </div>
 
       </form>
     </div>
