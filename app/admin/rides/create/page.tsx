@@ -3,13 +3,10 @@
 import axios from "axios";
 import { FormEvent, useState } from "react";
 
-import { CabSelector } from "@/components/booking/CabSelector";
 import { DropInput } from "@/components/booking/DropInput";
-import { FareEstimate } from "@/components/booking/FareEstimate";
 import { PickupInput } from "@/components/booking/PickupInput";
 import { RideSearchBar } from "@/components/booking/RideSearchBar";
 import { ConfirmRideButton } from "@/components/booking/ConfirmRideButton";
-import { PageHeader } from "@/components/common/PageHeader";
 
 export default function AdminCreateRidePage() {
   const [loading, setLoading] = useState(false);
@@ -27,7 +24,6 @@ export default function AdminCreateRidePage() {
     const payload = {
       pickup: formData.get("pickup"),
       drop: formData.get("drop"),
-      cabType: formData.get("cabType"),
     };
 
     try {
@@ -54,62 +50,68 @@ export default function AdminCreateRidePage() {
   };
 
   return (
-    <div className="py-16 max-[520px]:py-10 mx-auto w-[min(1200px,calc(100%-40px))] max-[1100px]:w-[min(calc(100%-36px),940px)] max-[520px]:w-[min(calc(100%-24px),100%)] grid gap-[18px]">
+    <div className="p-8 flex flex-col gap-8">
 
-      {/* PAGE HEADER */}
-      <PageHeader
-        title="Create Ride"
-        description="Admin can create rides on behalf of customers."
-      />
+      {/* Header */}
+      <div>
+        <h1 className="text-4xl font-extrabold text-black">
+          Create Ride
+        </h1>
 
-      {/* FORM */}
+        <p className="mt-2 text-gray-500 text-base">
+          Admin can create rides on behalf of customers and drivers.
+        </p>
+      </div>
+
+      {/* Form Card */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white border border-[#f0df9e] rounded-3xl p-6 shadow-[0_12px_32px_rgba(12,12,12,0.1)] max-[520px]:p-5 max-[520px]:rounded-[20px] grid gap-[18px]"
+        className="bg-white rounded-3xl shadow-lg p-8 max-w-4xl grid gap-6 border border-gray-100"
       >
 
-        {/* SEARCH BAR */}
+        {/* Search Bar */}
         <RideSearchBar />
 
-        {/* PICKUP & DROP */}
-        <div className="grid gap-6 grid-cols-2 max-[900px]:grid-cols-1 max-[760px]:grid-cols-1">
+        {/* Hidden Inputs */}
+        <input
+          type="hidden"
+          name="pickup"
+          value=""
+        />
 
-          {/* Hidden Inputs */}
-          <input
-            type="hidden"
-            name="pickup"
-            value=""
-          />
+        <input
+          type="hidden"
+          name="drop"
+          value=""
+        />
 
-          <input
-            type="hidden"
-            name="drop"
-            value=""
-          />
+        {/* Pickup & Drop */}
+        <div className="grid grid-cols-2 gap-6 max-[768px]:grid-cols-1">
 
-          <PickupInput />
-          <DropInput />
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-gray-800">
+              Pickup Location
+            </label>
+
+            <PickupInput />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-gray-800">
+              Drop Location
+            </label>
+
+            <DropInput />
+          </div>
+
         </div>
 
-        {/* CAB SELECTOR */}
-        <div>
-          <input
-            type="hidden"
-            name="cabType"
-            value=""
-          />
-
-          <CabSelector />
-        </div>
-
-        {/* FARE */}
-        <FareEstimate />
-
-        {/* MESSAGE */}
+        {/* Message */}
         {message && (
           <div
-            className={`rounded-xl px-4 py-3 font-semibold ${
-              message.toLowerCase().includes("failed")
+            className={`rounded-xl px-4 py-3 text-sm font-semibold ${
+              message.toLowerCase().includes("failed") ||
+              message.toLowerCase().includes("error")
                 ? "bg-red-100 text-red-600"
                 : "bg-green-100 text-green-700"
             }`}
@@ -118,7 +120,7 @@ export default function AdminCreateRidePage() {
           </div>
         )}
 
-        {/* CONFIRM BUTTON */}
+        {/* Button */}
         <button
           type="submit"
           disabled={loading}
