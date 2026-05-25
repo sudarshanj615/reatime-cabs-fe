@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function ContactPage() {
 
@@ -48,7 +49,14 @@ export default function ContactPage() {
 
       console.log(response.data);
 
-      alert("Query submitted successfully");
+      Swal.fire({
+        icon: "success",
+        title: "Query Submitted",
+        text: "Your query has been submitted successfully!",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
 
       setFormData({
         name: "",
@@ -63,7 +71,14 @@ export default function ContactPage() {
 
       console.log(error);
 
-      alert("Something went wrong");
+      Swal.fire({
+        icon: "error",
+        title: "Submission Failed",
+        text: "Failed to submit the query. Please try again.",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
 
     } finally {
 

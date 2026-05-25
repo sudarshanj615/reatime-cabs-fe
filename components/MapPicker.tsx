@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
-import { Protocol } from "pmtiles";
+import { Protocol } from "pmtiles"; 
 
 type Props = {
   onSelect: (location: string) => void;

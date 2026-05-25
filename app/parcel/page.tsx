@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MapPicker } from "@/components/MapPicker";
+import Swal from "sweetalert2";
 
 const parcelTypes = [
   "Documents",
@@ -33,15 +34,72 @@ export default function ParcelPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!pickup.trim()) return alert("Pickup location is required");
-    if (!drop.trim()) return alert("Drop location is required");
-    if (!selectedVehicle) return alert("Please select a vehicle");
-    if (!phone.trim()) return alert("Receiver phone number is required");
-    if (!/^\d{10}$/.test(phone)) return alert("Phone must be exactly 10 digits");
+    if (!pickup.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Pickup location is required",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
+      return;
+    }
+    if (!drop.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Drop location is required",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
+      return;
+    }
+    if (!selectedVehicle) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Please select a vehicle",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
+      return;
+    }
+    if (!phone.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Receiver phone number is required",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
+      return;
+    }
+    if (!/^\d{10}$/.test(phone)) {
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Input",
+        text: "Phone must be exactly 10 digits",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
+      return;
+    }
 
     console.log({ pickup, drop, vehicle: selectedVehicle, phone });
 
-    alert("Parcel booking submitted successfully!");
+    Swal.fire({
+      icon: "success",
+      title: "Parcel Booked",
+      text: "Your parcel has been booked successfully!",
+      confirmButtonText: "OK",
+      background: "#fff",
+      color: "#000",
+    });
   };
 
   return (

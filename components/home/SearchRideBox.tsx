@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export function SearchRideBox() {
   const router = useRouter();
@@ -11,7 +12,14 @@ export function SearchRideBox() {
 
   const handleSearch = () => {
     if (!pickup || !drop) {
-      alert("Please enter pickup and drop location");
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Please enter pickup and drop location",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
       return;
     }
 

@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 type Props = {
   pickup: string;
@@ -15,7 +16,14 @@ export function ConfirmRideButton({ pickup, drop }: Props) {
 
   const handleBookRide = async () => {
     if (!pickup || !drop) {
-      alert("Please enter pickup and drop");
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Please enter pickup and drop location",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
       return;
     }
 
@@ -32,13 +40,27 @@ export function ConfirmRideButton({ pickup, drop }: Props) {
 
       console.log("Ride booked:", res.data);
 
-      alert("Ride booked successfully!");
+      Swal.fire({
+        icon: "success",
+        title: "Ride Booked",
+        text: "Your ride has been booked successfully!",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
 
       router.push("/ride/success");
 
     } catch (err) {
       console.error(err);
-      alert("Booking failed");
+      Swal.fire({
+        icon: "error",
+        title: "Booking Failed",
+        text: "Failed to book the ride. Please try again.",
+        confirmButtonText: "OK",
+        background: "#fff",
+        color: "#000",
+      });
     } finally {
       setLoading(false);
     }
