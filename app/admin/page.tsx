@@ -33,7 +33,7 @@ export default function AdminDashboard() {
           </button>
 
           {/* PROFILE */}
-          <div className="w-[42px] h-[42px] rounded-full bg-[linear-gradient(135deg,#2563eb,#60a5fa)]" />
+          <div className="w-[42px] h-[42px] rounded-full bg-[linear-gradient(135deg,#facc15,#eab308)]" />
 
         </div>
       </div>

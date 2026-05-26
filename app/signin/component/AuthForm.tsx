@@ -39,10 +39,15 @@ export default function AuthForm({
     try {
       setLoading(true);
 
-      const response = await axios.post(
-        endpoints[role][mode],
-        payload
-      );
+     const response = await axios.post(
+  endpoints[role][mode],
+  payload,
+  {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+);
 
       console.log(response.data);
 
