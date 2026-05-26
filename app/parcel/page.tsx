@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { MapPicker } from "@/components/MapPicker";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import api from "@/lib/api/client";
+import { ENDPOINTS } from "@/lib/api/endpoint";
+import { MapPicker } from "@/components/MapPicker";
 
 const parcelTypes = [
   "Documents",
@@ -14,114 +16,108 @@ const parcelTypes = [
 ];
 
 const vehicleTypes = [
-  { name: "Bike 🏍", detail: "Fastest for small parcels up to 5 kg" },
-  { name: "Scooty 🛵", detail: "Best for light packages and quick city drops" },
-  { name: "Auto 🛺", detail: "Useful for medium parcels and safer handling" },
-  { name: "Mini Cab 🚕", detail: "For fragile parcels or multiple small boxes" },
-  { name: "Parcel Van 🚚", detail: "For fragile parcels or multiple small boxes" },
+  { name: "BIKE", detail: "Fastest for small parcels up to 5 kg" },
+  { name: "SCOOTY", detail: "Best for light packages" },
+  { name: "AUTO", detail: "Medium parcels" },
+  { name: "MINI_CAB", detail: "Fragile items" },
+  { name: "PARCEL_VAN", detail: "Large parcels" },
 ];
+
+const parcelTypeMap: Record<string, string> = {
+  Documents: "DOCUMENT",
+  Food: "FOOD",
+  Grocery: "GROCERY",
+  Electronics: "ELECTRONICS",
+  "Small Package (up to 5 kg)": "PACKAGE",
+  "Large Package (up to 20 kg)": "PACKAGE",
+};
 
 export default function ParcelPage() {
   const [selectedVehicle, setSelectedVehicle] = useState("");
+  const [selectedParcelType, setSelectedParcelType] = useState("");
 
   const [pickup, setPickup] = useState("");
   const [drop, setDrop] = useState("");
   const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
 
   const [openPickupMap, setOpenPickupMap] = useState(false);
   const [openDropMap, setOpenDropMap] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // AUTO VEHICLE ASSIGN
+  useEffect(() => {
+    if (!selectedParcelType) return;
+
+    let autoVehicle = "";
+
+    if (selectedParcelType === "Documents" || selectedParcelType === "Food") {
+      autoVehicle = "BIKE";
+    } else if (
+      selectedParcelType === "Grocery" ||
+      selectedParcelType === "Small Package (up to 5 kg)"
+    ) {
+      autoVehicle = "SCOOTY";
+    } else if (selectedParcelType === "Electronics") {
+      autoVehicle = "MINI_CAB";
+    } else if (selectedParcelType === "Large Package (up to 20 kg)") {
+      autoVehicle = "PARCEL_VAN";
+    }
+
+    setSelectedVehicle(autoVehicle);
+  }, [selectedParcelType]);
+
+  // SUBMIT
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!pickup.trim()) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing Information",
-        text: "Pickup location is required",
-        confirmButtonText: "OK",
-        background: "#fff",
-        color: "#000",
-      });
-      return;
-    }
-    if (!drop.trim()) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing Information",
-        text: "Drop location is required",
-        confirmButtonText: "OK",
-        background: "#fff",
-        color: "#000",
-      });
-      return;
-    }
-    if (!selectedVehicle) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing Information",
-        text: "Please select a vehicle",
-        confirmButtonText: "OK",
-        background: "#fff",
-        color: "#000",
-      });
-      return;
-    }
-    if (!phone.trim()) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing Information",
-        text: "Receiver phone number is required",
-        confirmButtonText: "OK",
-        background: "#fff",
-        color: "#000",
-      });
-      return;
-    }
-    if (!/^\d{10}$/.test(phone)) {
-      Swal.fire({
-        icon: "warning",
-        title: "Invalid Input",
-        text: "Phone must be exactly 10 digits",
-        confirmButtonText: "OK",
-        background: "#fff",
-        color: "#000",
-      });
-      return;
-    }
+    if (!selectedParcelType)
+      return Swal.fire("Error", "Select parcel type", "warning");
 
-    console.log({ pickup, drop, vehicle: selectedVehicle, phone });
+    if (!pickup || !drop)
+      return Swal.fire("Error", "Pickup/Drop required", "warning");
 
-    Swal.fire({
-      icon: "success",
-      title: "Parcel Booked",
-      text: "Your parcel has been booked successfully!",
-      confirmButtonText: "OK",
-      background: "#fff",
-      color: "#000",
-    });
+    if (!/^\d{10}$/.test(phone))
+      return Swal.fire("Error", "Invalid phone number", "warning");
+
+    const bookingData = {
+      parcelType: parcelTypeMap[selectedParcelType],
+      pickupLocation: pickup,
+      dropLocation: drop,
+      vehicleType: selectedVehicle,
+      receiverPhone: phone,
+      notes: notes || "",
+    };
+
+    try {
+      await api.post(ENDPOINTS.PARCEL.ADD, bookingData);
+
+      Swal.fire("Success", "Parcel Booked Successfully", "success");
+
+      setSelectedParcelType("");
+      setPickup("");
+      setDrop("");
+      setPhone("");
+      setNotes("");
+      setSelectedVehicle("");
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Backend error", "error");
+    }
   };
 
   return (
-    <div className="bg-[#fffdf3]">
+    <div className="bg-[#fffdf3] min-h-screen">
 
-      {/* HERO - FULL IMAGE (NO YELLOW) */}
-      <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden  bg-[#fffdf3]">
-
-        {/* optional soft glow background */}
-        <div className="absolute w-[500px] h-[500px]  bg-[#fffdf3] blur-3xl rounded-full"></div>
-
-        {/* BIG IMAGE */}
+      {/* HERO */}
+      <section className="w-full h-[55vh] flex items-center justify-center">
         <img
           src="/images/parcelbgimg.png"
-          alt="Parcel"
-          className="relative w-full h-full object-contain scale-110 drop-shadow-2xl"
+          className="h-full object-contain scale-110"
         />
-
       </section>
 
-      {/* FORM + VEHICLES (UNCHANGED) */}
-      <section className="mx-auto w-[min(1200px,calc(100%-40px))] grid grid-cols-[1.1fr_0.9fr] gap-[34px] py-[72px] max-[760px]:grid-cols-1">
+      {/* MAIN */}
+      <section className="mx-auto w-[min(1200px,calc(100%-40px))] grid grid-cols-[1.1fr_0.9fr] gap-[34px] py-[60px] max-[760px]:grid-cols-1">
 
         {/* FORM */}
         <form
@@ -130,122 +126,118 @@ export default function ParcelPage() {
         >
           <h2 className="text-3xl font-bold">Book a parcel delivery</h2>
 
-          <label className="grid gap-2 font-extrabold">
-            Parcel Type
-            <select className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]">
-              <option value="">Select parcel type</option>
-              {parcelTypes.map((type) => (
-                <option key={type}>{type}</option>
-              ))}
-            </select>
-          </label>
+          {/* PARCEL TYPE */}
+          <select
+            value={selectedParcelType}
+            onChange={(e) => setSelectedParcelType(e.target.value)}
+            className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+          >
+            <option value="">Select parcel type</option>
+            {parcelTypes.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
 
-          <div className="grid gap-6 grid-cols-2 max-[900px]:grid-cols-1">
+          {/* PICKUP WITH MAP */}
+          <div className="relative">
+            <input
+              value={pickup}
+              onChange={(e) => setPickup(e.target.value)}
+              placeholder="Pickup Location"
+              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px] pr-[50px] bg-[#fffdf3]"
+            />
 
-            <label className="grid gap-2 font-extrabold relative">
-              Pickup Location
+            <button
+              type="button"
+              onClick={() => setOpenPickupMap(true)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#F2B300] text-xl"
+            >
+              📍
+            </button>
 
-              <input
-                value={pickup}
-                onChange={(e) => setPickup(e.target.value)}
-                className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
-                placeholder="Enter pickup address"
+            {openPickupMap && (
+              <MapPicker
+                center={{ lat: 19.8762, lng: 75.3433 }}
+                onClose={() => setOpenPickupMap(false)}
+                onSelect={(loc) => {
+                  setPickup(loc);
+                  setOpenPickupMap(false);
+                }}
               />
-
-              <button
-                type="button"
-                onClick={() => setOpenPickupMap(true)}
-                className="absolute right-4 top-[42px] text-[#F2B300] text-xl"
-              >
-                📍
-              </button>
-
-              {openPickupMap && (
-                <MapPicker
-                  onClose={() => setOpenPickupMap(false)}
-                  onSelect={(loc) => setPickup(loc)}
-                />
-              )}
-            </label>
-
-            <label className="grid gap-2 font-extrabold relative">
-              Drop Location
-
-              <input
-                value={drop}
-                onChange={(e) => setDrop(e.target.value)}
-                className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
-                placeholder="Enter drop address"
-              />
-
-              <button
-                type="button"
-                onClick={() => setOpenDropMap(true)}
-                className="absolute right-4 top-[42px] text-[#F2B300] text-xl"
-              >
-                📍
-              </button>
-
-              {openDropMap && (
-                <MapPicker
-                  onClose={() => setOpenDropMap(false)}
-                  onSelect={(loc) => setDrop(loc)}
-                />
-              )}
-            </label>
-
+            )}
           </div>
 
-          <label className="grid gap-2 font-extrabold">
-            Receiver Phone
+          {/* DROP WITH MAP */}
+          <div className="relative">
             <input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
-              placeholder="Enter 10-digit mobile number"
+              value={drop}
+              onChange={(e) => setDrop(e.target.value)}
+              placeholder="Drop Location"
+              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px] pr-[50px] bg-[#fffdf3]"
             />
-          </label>
 
-          <label className="grid gap-2 font-extrabold">
-            Parcel Notes
-            <textarea
-              rows={4}
-              className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
-              placeholder="Add instructions"
-            />
-          </label>
+            <button
+              type="button"
+              onClick={() => setOpenDropMap(true)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#F2B300] text-xl"
+            >
+              📍
+            </button>
 
-          <button
-            type="submit"
-            className="w-fit min-h-[54px] px-[34px] rounded-[18px] bg-[#FFC72C] text-black font-black"
-          >
-            Confirm Parcel Booking
+            {openDropMap && (
+              <MapPicker
+                center={{ lat: 19.8762, lng: 75.3433 }}
+                onClose={() => setOpenDropMap(false)}
+                onSelect={(loc) => {
+                  setDrop(loc);
+                  setOpenDropMap(false);
+                }}
+              />
+            )}
+          </div>
+
+          {/* PHONE */}
+          <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Receiver Phone"
+            className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+          />
+
+          {/* NOTES */}
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Notes"
+            rows={3}
+            className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+          />
+
+          {/* VEHICLE */}
+          {selectedVehicle && (
+            <div className="rounded-[18px] bg-[#fff4cc] border border-[#ffd54f] p-4">
+              <p className="font-bold">
+                Vehicle: {selectedVehicle}
+              </p>
+            </div>
+          )}
+
+          {/* BUTTON */}
+          <button className="bg-[#FFC72C] font-black py-3 rounded-[18px]">
+            Confirm Booking
           </button>
         </form>
 
-        {/* VEHICLES */}
+        {/* SIDE PANEL */}
         <aside className="grid gap-[18px] rounded-[34px] p-9 bg-white shadow-[0_18px_44px_rgba(0,0,0,0.08)]">
+          <h2 className="text-2xl font-bold">Vehicle Options</h2>
 
-          <h2 className="text-3xl font-bold">Select vehicle</h2>
-
-          <div className="grid gap-3.5">
-            {vehicleTypes.map((vehicle) => (
-              <button
-                key={vehicle.name}
-                type="button"
-                onClick={() => setSelectedVehicle(vehicle.name)}
-                className={`grid gap-1.5 border rounded-[22px] p-[18px] text-left transition ${
-                  selectedVehicle === vehicle.name
-                    ? "border-[#ffd232] bg-[#F2B300]"
-                    : "border-[#eadfbb] bg-[#fffdf3]"
-                }`}
-              >
-                <strong>{vehicle.name}</strong>
-                <span>{vehicle.detail}</span>
-              </button>
-            ))}
-          </div>
-
+          {vehicleTypes.map((v) => (
+            <div key={v.name} className="border p-4 rounded-xl bg-[#fffdf3]">
+              <div className="font-bold">{v.name}</div>
+              <div className="text-sm">{v.detail}</div>
+            </div>
+          ))}
         </aside>
 
       </section>
