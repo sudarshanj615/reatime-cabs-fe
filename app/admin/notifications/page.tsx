@@ -48,9 +48,13 @@ const notifications: Notification[] = [
 
 export default function NotificationsPage() {
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [targetFilter, setTargetFilter] = useState("All");
+  const [statusFilter, setStatusFilter] =
+    useState("All Status");
 
+  const [targetFilter, setTargetFilter] =
+    useState("All Target");
+
+  /* FILTERED DATA */
   const filtered = useMemo(() => {
     return notifications.filter((n) => {
       const q = search.toLowerCase();
@@ -61,126 +65,211 @@ export default function NotificationsPage() {
         n.message.toLowerCase().includes(q);
 
       const matchesStatus =
-        statusFilter === "All" || n.status === statusFilter;
+        statusFilter === "All Status" ||
+        n.status === statusFilter;
 
       const matchesTarget =
-        targetFilter === "All" || n.target === targetFilter;
+        targetFilter === "All Target" ||
+        n.target === targetFilter;
 
-      return matchesSearch && matchesStatus && matchesTarget;
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesTarget
+      );
     });
   }, [search, statusFilter, targetFilter]);
 
+  /* STATS */
   const stats = {
     total: notifications.length,
-    sent: notifications.filter((n) => n.status === "Sent").length,
-    scheduled: notifications.filter((n) => n.status === "Scheduled").length,
-    failed: notifications.filter((n) => n.status === "Failed").length,
+
+    sent: notifications.filter(
+      (n) => n.status === "Sent"
+    ).length,
+
+    scheduled: notifications.filter(
+      (n) => n.status === "Scheduled"
+    ).length,
+
+    failed: notifications.filter(
+      (n) => n.status === "Failed"
+    ).length,
+  };
+
+  /* CLEAR FILTERS */
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("All Status");
+    setTargetFilter("All Target");
   };
 
   return (
     <div className="min-h-screen bg-[#fffdf3] px-6 py-6">
 
       {/* HEADER */}
-      <div className="flex justify-between items-center flex-wrap gap-4 mb-6">
+      <div className="flex justify-between items-center mb-7 gap-5 max-[768px]:flex-col max-[768px]:items-start">
 
         <div>
-          <h1 className="text-3xl font-bold text-[#111827]">
+
+          <h1 className="text-[30px] font-bold text-[#111827]">
             Notifications
           </h1>
 
           <p className="text-[#6b7280]">
             Send and manage system notifications
           </p>
+
         </div>
 
-        <button className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-5 py-3 rounded-xl font-semibold">
-          + Send Notification
-        </button>
+        <div className="flex items-center gap-4 max-[768px]:w-full max-[768px]:justify-between">
+
+          <button className="border-0 cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#facc15] text-black font-semibold hover:bg-[#eab308] hover:-translate-y-px transition">
+            + Send Notification
+          </button>
+
+          <div className="w-[42px] h-[42px] rounded-full bg-[linear-gradient(135deg,#facc15,#eab308)]" />
+
+        </div>
 
       </div>
 
       {/* STATS */}
-      <div className="grid grid-cols-4 gap-5 mb-6 max-[900px]:grid-cols-2 max-[520px]:grid-cols-1">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-5 mb-6">
 
-        <div className="bg-white p-5 rounded-2xl border">
-          <p className="text-sm text-gray-500">Total</p>
-          <h2 className="text-3xl font-bold">{stats.total}</h2>
+        <div className="bg-white p-6 rounded-[14px] border border-[#e5e7eb]">
+          <p className="text-[#6b7280] text-sm mb-2">
+            Total Notifications
+          </p>
+
+          <h2 className="text-[26px] font-bold text-[#111827]">
+            {stats.total}
+          </h2>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border">
-          <p className="text-sm text-gray-500">Sent</p>
-          <h2 className="text-3xl font-bold text-green-600">
+        <div className="bg-white p-6 rounded-[14px] border border-[#e5e7eb]">
+          <p className="text-[#6b7280] text-sm mb-2">
+            Sent
+          </p>
+
+          <h2 className="text-[26px] font-bold text-[#16a34a]">
             {stats.sent}
           </h2>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border">
-          <p className="text-sm text-gray-500">Scheduled</p>
-          <h2 className="text-3xl font-bold text-blue-600">
+        <div className="bg-white p-6 rounded-[14px] border border-[#e5e7eb]">
+          <p className="text-[#6b7280] text-sm mb-2">
+            Scheduled
+          </p>
+
+          <h2 className="text-[26px] font-bold text-[#0284c7]">
             {stats.scheduled}
           </h2>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border">
-          <p className="text-sm text-gray-500">Failed</p>
-          <h2 className="text-3xl font-bold text-red-600">
+        <div className="bg-white p-6 rounded-[14px] border border-[#e5e7eb]">
+          <p className="text-[#6b7280] text-sm mb-2">
+            Failed
+          </p>
+
+          <h2 className="text-[26px] font-bold text-[#dc2626]">
             {stats.failed}
           </h2>
         </div>
 
       </div>
 
-      {/* FILTERS */}
-      <div className="bg-white p-4 rounded-2xl border mb-6 flex flex-wrap gap-4">
+      {/* FILTER BAR */}
+      <div className="bg-white rounded-[16px] border border-[#f0e6c2] shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-5 mb-6">
 
-        <input
-          type="text"
-          placeholder="Search notifications..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-[220px] border px-4 py-3 rounded-xl outline-none"
-        />
+        <div className="flex flex-wrap gap-3.5 items-center">
 
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="border px-4 py-3 rounded-xl outline-none"
-        >
-          <option>All</option>
-          <option>Sent</option>
-          <option>Scheduled</option>
-          <option>Failed</option>
-        </select>
+          {/* SEARCH */}
+          <input
+            type="text"
+            placeholder="Search notifications..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+            className="flex-1 min-w-[220px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
+          />
 
-        <select
-          value={targetFilter}
-          onChange={(e) => setTargetFilter(e.target.value)}
-          className="border px-4 py-3 rounded-xl outline-none"
-        >
-          <option>All</option>
-          <option>All Users</option>
-          <option>Users</option>
-          <option>Drivers</option>
-          <option>System</option>
-        </select>
+          {/* STATUS FILTER */}
+          <select
+            value={statusFilter}
+            onChange={(e) =>
+              setStatusFilter(e.target.value)
+            }
+            className="min-w-[180px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm"
+          >
+            <option>All Status</option>
+            <option>Sent</option>
+            <option>Scheduled</option>
+            <option>Failed</option>
+          </select>
+
+          {/* TARGET FILTER */}
+          <select
+            value={targetFilter}
+            onChange={(e) =>
+              setTargetFilter(e.target.value)
+            }
+            className="min-w-[180px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm"
+          >
+            <option>All Target</option>
+            <option>All Users</option>
+            <option>Users</option>
+            <option>Drivers</option>
+            <option>System</option>
+          </select>
+
+          {/* CLEAR BUTTON */}
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="border-0 cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#111827] text-white font-semibold hover:bg-black transition"
+          >
+            Clear
+          </button>
+
+        </div>
 
       </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-2xl border overflow-auto">
+      <div className="bg-white rounded-[14px] p-[22px] shadow-[0_4px_10px_rgba(0,0,0,0.04)] border border-[#e5e7eb] overflow-x-auto">
 
-        <table className="w-full min-w-[900px]">
+        <table className="w-full border-collapse min-w-[950px]">
 
-          <thead className="bg-gray-50 border-b">
+          <thead className="bg-[#f9fafb]">
 
-            <tr className="[&_th]:text-left [&_th]:p-4 text-gray-600">
-              <th>ID</th>
-              <th>Title</th>
-              <th>Message</th>
-              <th>Target</th>
-              <th>Status</th>
-              <th>Created</th>
-              <th>Action</th>
+            <tr>
+
+              <th className="text-left p-[15px] text-sm text-[#6b7280]">
+                Notification
+              </th>
+
+              <th className="text-left p-[15px] text-sm text-[#6b7280]">
+                Message
+              </th>
+
+              <th className="text-left p-[15px] text-sm text-[#6b7280]">
+                Target
+              </th>
+
+              <th className="text-left p-[15px] text-sm text-[#6b7280]">
+                Status
+              </th>
+
+              <th className="text-left p-[15px] text-sm text-[#6b7280]">
+                Created
+              </th>
+
+              <th className="text-left p-[15px] text-sm text-[#6b7280]">
+                Action
+              </th>
+
             </tr>
 
           </thead>
@@ -190,34 +279,44 @@ export default function NotificationsPage() {
             {filtered.map((n) => (
               <tr
                 key={n.id}
-                className="border-b hover:bg-gray-50"
+                className="hover:bg-[#fafafa] transition"
               >
 
-                <td className="p-4 font-semibold">
-                  {n.id}
+                {/* NOTIFICATION */}
+                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
+
+                  <div>
+                    <p className="font-semibold text-[#111827]">
+                      {n.title}
+                    </p>
+
+                    <span className="text-xs text-[#6b7280]">
+                      {n.id}
+                    </span>
+                  </div>
+
                 </td>
 
-                <td className="p-4">
-                  {n.title}
-                </td>
-
-                <td className="p-4 max-w-[300px]">
+                {/* MESSAGE */}
+                <td className="p-[16px_15px] border-b border-[#f3f4f6] text-sm text-[#374151] max-w-[320px]">
                   {n.message}
                 </td>
 
-                <td className="p-4">
+                {/* TARGET */}
+                <td className="p-[16px_15px] border-b border-[#f3f4f6] text-sm text-[#374151]">
                   {n.target}
                 </td>
 
-                <td className="p-4">
+                {/* STATUS */}
+                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
 
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    className={`py-1.5 px-3 rounded-full text-xs font-semibold ${
                       n.status === "Sent"
-                        ? "bg-green-100 text-green-600"
+                        ? "bg-[#dcfce7] text-[#16a34a]"
                         : n.status === "Scheduled"
-                        ? "bg-blue-100 text-blue-600"
-                        : "bg-red-100 text-red-600"
+                        ? "bg-[#dbeafe] text-[#0284c7]"
+                        : "bg-[#fee2e2] text-[#dc2626]"
                     }`}
                   >
                     {n.status}
@@ -225,26 +324,47 @@ export default function NotificationsPage() {
 
                 </td>
 
-                <td className="p-4">
+                {/* CREATED */}
+                <td className="p-[16px_15px] border-b border-[#f3f4f6] text-sm text-[#374151]">
                   {n.created}
                 </td>
 
-                <td className="p-4">
+                {/* ACTION */}
+                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
 
-                  <button className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-4 py-2 rounded-lg text-sm font-semibold">
-                    View
-                  </button>
+                  <div className="flex gap-2 flex-wrap">
+
+                    <button className="bg-[#eff6ff] text-[#2563eb] py-[7px] px-3 rounded-lg text-[13px] font-semibold hover:bg-[#dbeafe]">
+                      View
+                    </button>
+
+                  </div>
 
                 </td>
 
               </tr>
             ))}
 
+            {/* EMPTY STATE */}
+            {filtered.length === 0 && (
+              <tr>
+
+                <td
+                  colSpan={6}
+                  className="text-center p-7 text-[#6b7280]"
+                >
+                  No notifications found
+                </td>
+
+              </tr>
+            )}
+
           </tbody>
 
         </table>
 
       </div>
+
     </div>
   );
 }
