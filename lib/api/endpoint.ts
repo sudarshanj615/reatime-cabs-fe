@@ -3,17 +3,18 @@ export const ENDPOINTS = {
     ADD: "/parcel/add",
   },
 
-  USER: {
-    LOGIN: "/user/login",
-    REGISTER: "/user/register",
-  },
 
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
   },
 
-    CONTACT: {
-      SUBMIT: "/contact"
-    }   
+  CONTACT: {
+    SUBMIT: "/contact"
+  },
+
+  RIDES: {
+    CREATE: "/rides/create",
+    SEARCH: "/rides/search",
+  },    
 
 };
