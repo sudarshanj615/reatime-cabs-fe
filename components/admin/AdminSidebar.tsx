@@ -15,6 +15,9 @@ export default function AdminSidebar() {
     { name: "Issues", path: "/admin/issues" },
     { name: "Payments", path: "/admin/payments" },
     { name: "Settings", path: "/admin/settings" },
+    {name : "Analytics", path: "/admin/analytics"},
+    {name : "Notifications", path: "/admin/notifications"},
+    {name : "Support", path: "/admin/support"},
   ];
 
   return (
