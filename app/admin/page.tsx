@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 export default function AdminDashboard() {
+  const [showReportDropdown, setShowReportDropdown] = useState(false);
+
   return (
     <div className="admin-dashboard min-h-screen bg-[#fffdf3] px-6 py-6">
 
@@ -12,13 +17,11 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-4 flex-wrap max-[768px]:w-full">
 
           {/* CREATE ACCOUNT BUTTON */}
-
           <Link href="/admin/users/create">
             <button className="border-0 outline-none cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#facc15] text-black font-semibold transition duration-200 ease-in hover:bg-[#eab308] hover:-translate-y-px">
               Create New Account
             </button>
           </Link>
-          
 
           {/* CREATE RIDE BUTTON */}
           <Link href="/admin/rides/create">
@@ -27,10 +30,44 @@ export default function AdminDashboard() {
             </button>
           </Link>
 
-          {/* GENERATE REPORT BUTTON */}
-          <button className="border-0 outline-none cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#facc15] text-black font-semibold transition duration-200 ease-in hover:bg-[#eab308] hover:-translate-y-px">
-            Generate Report
-          </button>
+          {/* GENERATE REPORT DROPDOWN (ONLY CHANGE) */}
+          <div className="relative">
+
+            <button
+              onClick={() => setShowReportDropdown(!showReportDropdown)}
+              className="border-0 outline-none cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#facc15] text-black font-semibold transition duration-200 ease-in hover:bg-[#eab308] hover:-translate-y-px"
+            >
+              Generate Report
+            </button>
+
+            {showReportDropdown && (
+              <div className="absolute top-[55px] right-0 bg-white border border-[#e5e7eb] rounded-[10px] shadow-md w-[180px] z-50">
+
+                <button
+                  onClick={() => alert("CSV selected")}
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  CSV File
+                </button>
+
+                <button
+                  onClick={() => alert("PDF selected")}
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  PDF File
+                </button>
+
+                <button
+                  onClick={() => alert("Excel selected")}
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                >
+                  Excel File
+                </button>
+
+              </div>
+            )}
+
+          </div>
 
           {/* PROFILE */}
           <div className="w-[42px] h-[42px] rounded-full bg-[linear-gradient(135deg,#facc15,#eab308)]" />
@@ -40,7 +77,7 @@ export default function AdminDashboard() {
 
       {/* KPI CARDS */}
       <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-5 mb-6 max-[768px]:grid-cols-1">
-        
+
         <div className="bg-white rounded-[14px] p-6 shadow-[0_4px_10px_rgba(0,0,0,0.04)] border border-[#e5e7eb]">
           <p className="text-[#6b7280] mb-[10px] text-sm">Total Users</p>
           <h2 className="text-[28px] font-bold text-[#111827]">1,248</h2>
@@ -60,6 +97,7 @@ export default function AdminDashboard() {
           <p className="text-[#6b7280] mb-[10px] text-sm">Revenue Today</p>
           <h2 className="text-[28px] font-bold text-[#111827]">₹18,540</h2>
         </div>
+
       </div>
 
       {/* LOWER GRID */}
@@ -67,7 +105,7 @@ export default function AdminDashboard() {
 
         {/* RECENT RIDES */}
         <div className="bg-white rounded-[14px] p-[22px] shadow-[0_4px_10px_rgba(0,0,0,0.04)] border border-[#e5e7eb]">
-          
+
           <h3 className="mb-[18px] text-lg font-bold text-[#111827]">
             Recent Rides
           </h3>
@@ -84,11 +122,10 @@ export default function AdminDashboard() {
             </thead>
 
             <tbody>
-
               <tr>
                 <td>#RIDE1021</td>
-                <td>Aman</td>
-                <td>Raj</td>
+                <td>Aman Sharma</td>
+                <td>Raj Singh</td>
                 <td>
                   <span className="py-1.5 px-3 rounded-full text-xs font-semibold bg-[#dbeafe] text-[#0284c7]">
                     Ongoing
@@ -98,8 +135,8 @@ export default function AdminDashboard() {
 
               <tr>
                 <td>#RIDE1022</td>
-                <td>Neha</td>
-                <td>Vikram</td>
+                <td>Neha Verma</td>
+                <td>Vikram Rao</td>
                 <td>
                   <span className="py-1.5 px-3 rounded-full text-xs font-semibold bg-[#dcfce7] text-[#16a34a]">
                     Completed
@@ -109,16 +146,16 @@ export default function AdminDashboard() {
 
               <tr>
                 <td>#RIDE1023</td>
-                <td>John</td>
-                <td>Mike</td>
+                <td>John Doe</td>
+                <td>Mike Ross</td>
                 <td>
                   <span className="py-1.5 px-3 rounded-full text-xs font-semibold bg-[#fef3c7] text-[#b45309]">
                     Pending
                   </span>
                 </td>
               </tr>
-
             </tbody>
+
           </table>
         </div>
 

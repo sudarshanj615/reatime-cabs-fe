@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import api from "@/lib/api/client";
+import { ENDPOINTS } from "@/lib/api/endpoint";
 
 type Suggestion = {
   display_name: string;
@@ -51,15 +54,19 @@ export function SearchRideBox() {
   // BOOK RIDE → backend call
   const handleBookRide = async () => {
     if (!pickup.trim() || !drop.trim()) {
-      alert("Please enter pickup and drop");
+      Swal.fire({
+        icon: "warning",
+        title: "Locations Required",
+        text: "Please enter both pickup and drop locations",
+      });
       return;
     }
 
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://192.168.1.23:8081/rides/book",
+      const res = await api.post(
+        ENDPOINTS.PARCEL.ADD,
         {
           pickup,
           drop,
@@ -67,10 +74,21 @@ export function SearchRideBox() {
       );
 
       console.log(res.data);
-      alert("Ride booked successfully!");
+      console.log("API BASE: ", process.env.NEXT_PUBLIC_API_BASE_URL);
+      console.log("Endpoint:", ENDPOINTS.PARCEL.ADD);
+      
+      Swal.fire({
+        icon: "success",
+        title: "Ride booked successfully!",
+        text: "Your ride has been booked.",
+      });
     } catch (err) {
       console.error(err);
-      alert("Booking failed");
+      Swal.fire({
+        icon: "error",
+        title: "Booking failed",
+        text: "Failed to book the ride.",
+      });
     } finally {
       setLoading(false);
     }

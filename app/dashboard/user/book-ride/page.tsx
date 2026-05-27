@@ -11,36 +11,36 @@ import { ConfirmRideButton } from "@/components/booking/ConfirmRideButton";
 import { PageHeader } from "@/components/common/PageHeader";
 
 export default function BookRidePage() {
-  // ✅ ADD STATE HERE (THIS FIXES YOUR ERROR)
   const [pickup, setPickup] = useState("");
   const [drop, setDrop] = useState("");
 
-  const [pickupCoords, setPickupCoords] =
-    useState({
-      lat: 0,
-      lng: 0,
-    });
+  const [pickupCoords, setPickupCoords] = useState({
+    lat: 0,
+    lng: 0,
+  });
 
-  const [dropCoords, setDropCoords] =
-    useState({
-      lat: 0,
-      lng: 0,
-    });
+  const [dropCoords, setDropCoords] = useState({
+    lat: 0,
+    lng: 0,
+  });
 
   return (
-    <div className="py-16 max-[520px]:py-10 mx-auto w-[min(1200px,calc(100%-40px))] grid gap-[18px]">
+    <div className="py-16 max-[520px]:py-10 mx-auto w-[min(1200px,calc(100%-40px))] grid gap-[24px]">
 
-      <PageHeader
-        title="Book Ride"
-        description="Choose pickup, drop, and cab type for your trip."
-      />
+      {/* HERO IMAGE */}
+      <div className="overflow-hidden rounded-[32px] border border-[#f0df9e] shadow-[0_12px_32px_rgba(12,12,12,0.12)]">
+        <img
+          src="/images/book-ride-banner.png"
+          alt="Book Ride Banner"
+          className="w-full h-auto object-cover"
+        />
+      </div>
 
       <div className="bg-white border border-[#f0df9e] rounded-3xl p-6 shadow-[0_12px_32px_rgba(12,12,12,0.1)] grid gap-[18px]">
 
         {/* optional search bar */}
         <RideSearchBar />
 
-        {/* ✅ FIXED INPUTS */}
         <div className="grid gap-6 grid-cols-2 max-[900px]:grid-cols-1">
           <PickupInput
             value={pickup}
@@ -51,14 +51,13 @@ export default function BookRidePage() {
           <DropInput
             value={drop}
             onChange={setDrop}
-            setCoordinates={setDropCoords}  
+            setCoordinates={setDropCoords}
           />
         </div>
 
         <CabSelector />
         <FareEstimate />
 
-        {/* ✅ FIXED BUTTON */}
         <ConfirmRideButton
           pickup={pickup}
           drop={drop}

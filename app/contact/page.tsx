@@ -1,8 +1,9 @@
 "use client";
 
-import axios from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import api from "@/lib/api/client";
+import { ENDPOINTS } from "@/lib/api/endpoint";
 
 export default function ContactPage() {
 
@@ -42,8 +43,8 @@ export default function ContactPage() {
 
       setLoading(true);
 
-      const response = await axios.post(
-        "http://192.168.1.23:8081/contact",
+      const response = await api.post(
+        ENDPOINTS.CONTACT.SUBMIT,
         formData
       );
 
