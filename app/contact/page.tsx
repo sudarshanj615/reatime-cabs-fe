@@ -129,7 +129,7 @@ export default function ContactPage() {
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter your name"
-              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
               required
             />
 
@@ -145,7 +145,7 @@ export default function ContactPage() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
               required
             />
 
@@ -161,7 +161,7 @@ export default function ContactPage() {
               value={formData.mobileNumber}
               onChange={handleChange}
               placeholder="Enter your mobile number"
-              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
               required
             />
 
@@ -175,10 +175,24 @@ export default function ContactPage() {
               name="accountType"
               value={formData.accountType}
               onChange={handleChange}
-              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              className={`
+    w-full
+    min-h-[54px]
+    border
+    border-[#eadfbb]
+    rounded-[10px]
+    p-[10px]
+    bg-[rgba(255,255,255,0.2)]
+    mt-[5px]
+    outline-none
+    focus:outline-none
+    focus:ring-0
+    focus:border-[#f0df9e]
+    max-[520px]:w-full
+    ${formData.accountType ? "text-[#080808]" : "text-[#8f8f8f]"}
+  `}
               required
             >
-
               <option value="" disabled>
                 Select account type
               </option>
@@ -194,9 +208,7 @@ export default function ContactPage() {
               <option value="Business Partner">
                 Business Partner
               </option>
-
             </select>
-
           </label>
 
           <label className="grid gap-2">
@@ -207,10 +219,24 @@ export default function ContactPage() {
               name="queryType"
               value={formData.queryType}
               onChange={handleChange}
-              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3]"
+              className={`
+    w-full
+    min-h-[54px]
+    border
+    border-[#eadfbb]
+    rounded-[10px]
+    p-[10px]
+    bg-[rgba(255,255,255,0.2)]
+    mt-[5px]
+    outline-none
+    focus:outline-none
+    focus:ring-0
+    focus:border-[#f0df9e]
+    max-[520px]:w-full
+    ${formData.queryType ? "text-[#080808]" : "text-[#8f8f8f]"}
+  `}
               required
             >
-
               <option value="" disabled>
                 Select query
               </option>
@@ -230,9 +256,7 @@ export default function ContactPage() {
               <option value="Safety Support">
                 Safety Support
               </option>
-
             </select>
-
           </label>
 
           <label className="grid gap-2">
@@ -245,7 +269,7 @@ export default function ContactPage() {
               value={formData.comment}
               onChange={handleChange}
               placeholder="Write your message"
-              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px_16px] bg-[#fffdf3] resize-y"
+              className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
               required
             />
 
