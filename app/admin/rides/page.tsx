@@ -1,59 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useMemo, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function RidesPage() {
+  const [rides, setRides] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
 
-  const rides = [
-    {
-      id: "RIDE1001",
-      user: "Aman Sharma",
-      driver: "Raj Singh",
-      from: "Chh.Shivaji Nagar",
-      to: "Swargate",
-      status: "Ongoing",
-      fare: 320,
-    },
-    {
-      id: "RIDE1002",
-      user: "Neha Verma",
-      driver: "Vikram Rao",
-      from: "BTM Layout",
-      to: "Koramangala",
-      status: "Completed",
-      fare: 180,
-    },
-    {
-      id: "RIDE1003",
-      user: "John Doe",
-      driver: "Not Assigned",
-      from: "Whitefield",
-      to: "HSR Layout",
-      status: "Pending",
-      fare: 0,
-    },
-    {
-      id: "RIDE1004",
-      user: "Sara Khan",
-      driver: "Vikram Rao",
-      from: "Indiranagar",
-      to: "Majestic",
-      status: "Cancelled",
-      fare: 0,
-    },
-  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // SAFE STRING
+  const safe = (val: any) => String(val ?? "").toLowerCase();
+
+  const fetchRides = async () => {
+    try {
+      const res = await axios.get("http://192.168.1.23:8081/rides");
+      setRides(res.data || []);
+    } catch (err) {
+      Swal.fire("Error", "Failed to fetch rides", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRides();
+  }, []);
 
   const q = search.toLowerCase();
 
+  // FILTER
   const filtered = rides.filter((r) => {
     const matchSearch =
-      r.id.toLowerCase().includes(q) ||
-      r.user.toLowerCase().includes(q) ||
-      r.driver.toLowerCase().includes(q) ||
-      r.from.toLowerCase().includes(q) ||
-      r.to.toLowerCase().includes(q);
+      safe(r.id).includes(q) ||
+      safe(r.user?.name).includes(q) ||
+      safe(r.driver?.name).includes(q) ||
+      safe(r.from).includes(q) ||
+      safe(r.to).includes(q);
 
     const matchStatus =
       statusFilter === "All Status" || r.status === statusFilter;
@@ -61,225 +49,137 @@ export default function RidesPage() {
     return matchSearch && matchStatus;
   });
 
+  const totalPages = Math.ceil(filtered.length / pageSize);
+
+  const paginatedRides = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filtered.slice(start, start + pageSize);
+  }, [filtered, currentPage, pageSize]);
+
   const clearFilters = () => {
     setSearch("");
     setStatusFilter("All Status");
+    setCurrentPage(1);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
   };
 
   const statusStyle = (status: string) => {
-    if (status === "Completed")
-      return "bg-[#dcfce7] text-[#16a34a]";
-
-    if (status === "Pending")
-      return "bg-[#fef3c7] text-[#b45309]";
-
-    if (status === "Cancelled")
-      return "bg-[#fee2e2] text-[#dc2626]";
-
+    if (status === "Completed") return "bg-[#dcfce7] text-[#16a34a]";
+    if (status === "Pending") return "bg-[#fef3c7] text-[#b45309]";
+    if (status === "Cancelled") return "bg-[#fee2e2] text-[#dc2626]";
     return "bg-[#dbeafe] text-[#0284c7]";
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-xl font-bold">
+        Loading rides...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#fffdf3] px-6 py-6">
 
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-7 gap-5 max-[768px]:flex-col max-[768px]:items-start">
-
+      <div className="flex justify-between items-center mb-7">
         <div>
-          <h1 className="text-[30px] font-bold text-[#111827]">
-            Rides
-          </h1>
-
-          <p className="text-[#6b7280]">
-            Track all ride activity in real time
-          </p>
+          <h1 className="text-[30px] font-bold text-[#111827]">Rides</h1>
+          <p className="text-[#6b7280]">Track all ride activity in real time</p>
         </div>
 
-        <div className="flex items-center gap-4 max-[768px]:w-full max-[768px]:justify-between">
-
-          <button className="border-0 cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#facc15] text-black font-semibold hover:bg-[#eab308] hover:-translate-y-px transition">
-            Export Rides
-          </button>
-
-          <div className="w-[42px] h-[42px] rounded-full bg-[linear-gradient(135deg,#facc15,#eab308)]" />
-
-        </div>
+        <button className="py-[11px] px-[18px] rounded-[10px] bg-[#facc15] font-semibold">
+          Export Rides
+        </button>
       </div>
 
-      {/* FILTER BAR */}
-      <div className="bg-white rounded-[16px] border border-[#f0e6c2] shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-5 mb-6">
+      {/* FILTER */}
+      <div className="bg-white rounded-[16px] p-5 mb-6 flex gap-3 flex-wrap">
 
-        <div className="flex flex-wrap gap-3.5 items-center">
+        <input
+          className="border rounded px-3 py-2 flex-1 min-w-[220px]"
+          placeholder="Search ride, user, driver..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
 
-          <input
-            className="flex-1 min-w-[220px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
-            placeholder="Search ride, user, driver..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        <select
+          className="border rounded px-3 py-2"
+          value={statusFilter}
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          <option>All Status</option>
+          <option>Ongoing</option>
+          <option>Completed</option>
+          <option>Pending</option>
+          <option>Cancelled</option>
+        </select>
 
-          <select
-            className="min-w-[180px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option>All Status</option>
-            <option>Ongoing</option>
-            <option>Completed</option>
-            <option>Pending</option>
-            <option>Cancelled</option>
-          </select>
+        <button onClick={clearFilters} className="bg-black text-white px-4 py-2 rounded">
+          Clear
+        </button>
 
-          <button
-            onClick={clearFilters}
-            className="border-0 cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#111827] text-white font-semibold hover:bg-black transition"
-          >
-            Clear
-          </button>
-
-        </div>
       </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-[14px] p-[22px] shadow-[0_4px_10px_rgba(0,0,0,0.04)] border border-[#e5e7eb] overflow-x-auto">
+      <div className="bg-white rounded-[14px] p-6 overflow-x-auto">
 
-        <table className="w-full border-collapse min-w-[950px]">
-
-          <thead className="bg-[#f9fafb]">
-
-            <tr>
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Ride
-              </th>
-
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                User
-              </th>
-
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Driver
-              </th>
-
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Route
-              </th>
-
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Status
-              </th>
-
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Fare
-              </th>
-
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Action
-              </th>
+        <table className="w-full min-w-[900px]">
+          <thead>
+            <tr className="text-left text-gray-500">
+              <th>Ride</th>
+              <th>User</th>
+              <th>Driver</th>
+              <th>Route</th>
+              <th>Status</th>
+              <th>Fare</th>
             </tr>
-
           </thead>
 
           <tbody>
+            {paginatedRides.map((r, i) => (
+              <tr key={r.id || i} className="border-t">
 
-            {filtered.map((r) => (
-              <tr
-                key={r.id}
-                className="hover:bg-[#fafafa] transition"
-              >
+                <td className="py-3">{r.id}</td>
 
-                {/* RIDE */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
-
-                  <div>
-                    <p className="font-semibold text-[#111827]">
-                      {r.id}
-                    </p>
-
-                    <span className="text-xs text-[#6b7280]">
-                      Ride ID
-                    </span>
-                  </div>
-
+                {/* ✅ FIXED OBJECT ISSUE */}
+                <td className="py-3">
+                  {r.user?.name || r.user?.email || "N/A"}
                 </td>
 
-                {/* USER */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6] text-sm text-[#374151]">
-                  {r.user}
+                <td className="py-3">
+                  {r.driver?.name || r.driver?.email || "Not Assigned"}
                 </td>
 
-                {/* DRIVER */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6] text-sm text-[#374151]">
-                  {r.driver}
+                <td className="py-3">
+                  {r.from} → {r.to}
                 </td>
 
-                {/* ROUTE */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6] text-sm text-[#374151]">
-
-                  <div className="flex items-center gap-2">
-                    <span>{r.from}</span>
-
-                    <span className="text-[#6b7280]">
-                      →
-                    </span>
-
-                    <span>{r.to}</span>
-                  </div>
-
-                </td>
-
-                {/* STATUS */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
-
-                  <span
-                    className={`py-1.5 px-3 rounded-full text-xs font-semibold ${statusStyle(
-                      r.status
-                    )}`}
-                  >
+                <td className="py-3">
+                  <span className={`px-3 py-1 rounded text-xs ${statusStyle(r.status)}`}>
                     {r.status}
                   </span>
-
                 </td>
 
-                {/* FARE */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6] font-semibold text-[#111827]">
-                  ₹{r.fare.toLocaleString("en-IN")}
-                </td>
-
-                {/* ACTION */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
-
-                  <div className="flex gap-2">
-
-                    <button className="bg-[#eff6ff] text-[#2563eb] py-[7px] px-3 rounded-lg text-[13px] font-semibold hover:bg-[#dbeafe]">
-                      View
-                    </button>
-
-                    <button className="bg-[#eff6ff] text-[#2563eb] py-[7px] px-3 rounded-lg text-[13px] font-semibold hover:bg-[#dbeafe]">
-                      Track
-                    </button>
-
-                  </div>
-
+                <td className="py-3 font-semibold">
+                  ₹{(r.fare || 0).toLocaleString("en-IN")}
                 </td>
 
               </tr>
             ))}
-
-            {filtered.length === 0 && (
-              <tr>
-                <td
-                  colSpan={7}
-                  className="text-center p-7 text-[#6b7280]"
-                >
-                  No rides match these filters.
-                </td>
-              </tr>
-            )}
-
           </tbody>
 
         </table>
-
       </div>
 
     </div>

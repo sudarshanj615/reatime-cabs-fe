@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { ENDPOINTS } from "@/lib/api/endpoint";
-import api from "@/lib/api/client";
+import axios from "axios";
 
 type Props = {
   pickup: string;
@@ -31,8 +30,8 @@ export function ConfirmRideButton({ pickup, drop }: Props) {
     try {
       setLoading(true);
 
-      const res = await api.post(
-        ENDPOINTS.RIDES.CREATE,
+      const res = await axios.post(
+        "http://192.168.1.23:8081/rides/book",
         {
           pickup,
           drop,

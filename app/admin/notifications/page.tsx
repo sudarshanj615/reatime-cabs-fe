@@ -201,7 +201,7 @@ export default function NotificationsPage() {
             onChange={(e) =>
               setStatusFilter(e.target.value)
             }
-            className="min-w-[180px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm"
+            className="flex-1 min-w-[220px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
           >
             <option>All Status</option>
             <option>Sent</option>
@@ -215,13 +215,13 @@ export default function NotificationsPage() {
             onChange={(e) =>
               setTargetFilter(e.target.value)
             }
-            className="min-w-[180px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm"
+            className="flex-1 min-w-[220px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
           >
-            <option>All Target</option>
-            <option>All Users</option>
-            <option>Users</option>
-            <option>Drivers</option>
-            <option>System</option>
+            <option value="">All Target</option>
+            <option value="all-users">All Users</option>
+            <option value="users">Users</option>
+            <option value="drivers">Drivers</option>
+            <option value="system">System</option>
           </select>
 
           {/* CLEAR BUTTON */}

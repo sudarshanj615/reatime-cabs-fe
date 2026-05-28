@@ -119,7 +119,7 @@ export default function ContactPage() {
             Find help for your queries here:
           </h2>
 
-          <label className="grid gap-2 font-bold">
+          <label className="grid gap-2 ">
 
             Name *
 
@@ -135,7 +135,7 @@ export default function ContactPage() {
 
           </label>
 
-          <label className="grid gap-2 font-bold">
+          <label className="grid gap-2">
 
             Email Address *
 
@@ -151,7 +151,7 @@ export default function ContactPage() {
 
           </label>
 
-          <label className="grid gap-2 font-bold">
+          <label className="grid gap-2 ">
 
             Mobile Number *
 
@@ -167,7 +167,7 @@ export default function ContactPage() {
 
           </label>
 
-          <label className="grid gap-2 font-bold">
+          <label className="grid gap-2">
 
             You are a *
 
@@ -199,7 +199,7 @@ export default function ContactPage() {
 
           </label>
 
-          <label className="grid gap-2 font-bold">
+          <label className="grid gap-2">
 
             Select Query *
 
@@ -235,7 +235,7 @@ export default function ContactPage() {
 
           </label>
 
-          <label className="grid gap-2 font-bold">
+          <label className="grid gap-2">
 
             Comment *
 
