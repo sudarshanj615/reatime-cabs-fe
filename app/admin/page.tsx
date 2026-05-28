@@ -20,8 +20,8 @@ export default function AdminDashboard() {
     try {
       const [kpiRes, ridesRes, alertsRes] =
         await Promise.all([
-          axios.get("http://192.168.1.23:8081/dashboard/kpis"),
-          axios.get("http://192.168.1.23:8081/rides/recent"),
+          axios.get("http://192.168.1.23:8081/dashboard"),
+          axios.get("http://192.168.1.23:8081/rides"),
           axios.get("http://192.168.1.23:8081/alerts"),
         ]);
 
