@@ -172,7 +172,7 @@ export default function ParcelPage() {
             onChange={(e) =>
               setSelectedParcelType(e.target.value)
             }
-            className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+            className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
           >
             <option value="">
               Select parcel type
@@ -193,7 +193,7 @@ export default function ParcelPage() {
                 setPickup(e.target.value)
               }
               placeholder="Pickup Location"
-              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px] pr-[50px] bg-[#fffdf3]"
+              className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
             />
 
             <button
@@ -231,7 +231,7 @@ export default function ParcelPage() {
                 setDrop(e.target.value)
               }
               placeholder="Drop Location"
-              className="w-full border border-[#eadfbb] rounded-[18px] p-[15px] pr-[50px] bg-[#fffdf3]"
+              className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
             />
 
             <button
@@ -268,7 +268,7 @@ export default function ParcelPage() {
               setPhone(e.target.value)
             }
             placeholder="Receiver Phone"
-            className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+            className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
           />
 
           {/* NOTES */}
@@ -279,7 +279,7 @@ export default function ParcelPage() {
             }
             placeholder="Notes"
             rows={3}
-            className="border border-[#eadfbb] rounded-[18px] p-[15px] bg-[#fffdf3]"
+            className="w-full min-h-[54px] border border-[#eadfbb] rounded-[10px] p-[10px] bg-[rgba(255,255,255,0.2)] text-[#080808] mt-[5px] outline-none focus:border-[#ffd232] focus:shadow-[0_0_0_3px_rgba(248,189,16,0.22)] max-[520px]:w-full"
           />
 
           {/* VEHICLE */}
