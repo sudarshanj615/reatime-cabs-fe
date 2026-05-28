@@ -1,59 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useMemo, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function DriversPage() {
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] =
-    useState("All Status");
+  const [drivers, setDrivers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All Status");
   const [verificationFilter, setVerificationFilter] =
     useState("All Verification");
 
-  const drivers = [
-    {
-      id: "D101",
-      name: "Raj Singh",
-      email: "raj@gmail.com",
-      status: "Online",
-      rides: 124,
-      earnings: 15420,
-      rating: 4.8,
-      verified: true,
-    },
-    {
-      id: "D102",
-      name: "Mike Ross",
-      email: "mike@gmail.com",
-      status: "Offline",
-      rides: 89,
-      earnings: 9800,
-      rating: 4.5,
-      verified: false,
-    },
-    {
-      id: "D103",
-      name: "Vikram Rao",
-      email: "vikram@gmail.com",
-      status: "Busy",
-      rides: 210,
-      earnings: 24500,
-      rating: 4.9,
-      verified: true,
-    },
-  ];
+  // ✅ PAGINATION STATES
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
-  const q = search.toLowerCase();
+  // ✅ FETCH DRIVERS FROM BACKEND
+  const fetchDrivers = async () => {
+    try {
+      const res = await axios.get(
+        "http://192.168.1.23:8081/drivers"
+      );
 
+      setDrivers(res.data || []);
+    } catch (err) {
+      Swal.fire(
+        "Error",
+        "Failed to fetch drivers",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDrivers();
+  }, []);
+
+  // ✅ FILTERED DATA
   const filtered = drivers.filter((d) => {
     const verification = d.verified
       ? "Verified"
       : "Pending";
 
+    const q = search.toLowerCase();
+
     const matchSearch =
-      d.name.toLowerCase().includes(q) ||
-      d.email.toLowerCase().includes(q) ||
-      d.id.toLowerCase().includes(q);
+      (d.name || "")
+        .toLowerCase()
+        .includes(q) ||
+      (d.email || "")
+        .toLowerCase()
+        .includes(q) ||
+      (d.id || "")
+        .toString()
+        .toLowerCase()
+        .includes(q);
 
     const matchStatus =
       statusFilter === "All Status" ||
@@ -70,12 +75,41 @@ export default function DriversPage() {
     );
   });
 
+  // ✅ TOTAL PAGES
+  const totalPages = Math.ceil(
+    filtered.length / pageSize
+  );
+
+  // ✅ PAGINATED DATA
+  const paginatedDrivers = useMemo(() => {
+    const start =
+      (currentPage - 1) * pageSize;
+
+    return filtered.slice(
+      start,
+      start + pageSize
+    );
+  }, [filtered, currentPage, pageSize]);
+
+  // ✅ CLEAR FILTERS
   const clearFilters = () => {
     setSearch("");
     setStatusFilter("All Status");
-    setVerificationFilter("All Verification");
+    setVerificationFilter(
+      "All Verification"
+    );
+    setCurrentPage(1);
   };
 
+  // ✅ CHANGE PAGE SIZE
+  const handlePageSizeChange = (
+    size: number
+  ) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  };
+
+  // ✅ STATUS STYLE
   const statusStyle = (status: string) => {
     if (status === "Online")
       return "bg-[#dcfce7] text-[#16a34a]";
@@ -86,11 +120,20 @@ export default function DriversPage() {
     return "bg-[#e5e7eb] text-[#4b5563]";
   };
 
+  // ✅ LOADING
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-xl font-bold">
+        Loading drivers...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#fffdf3] px-6 py-6">
 
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-7 gap-5 max-[768px]:flex-col max-[768px]:items-start">
+      <div className="flex justify-between items-center mb-7 max-[768px]:flex-col max-[768px]:items-start gap-4">
 
         <div>
           <h1 className="text-[30px] font-bold text-[#111827]">
@@ -104,35 +147,39 @@ export default function DriversPage() {
 
         <div className="flex items-center gap-4 max-[768px]:w-full max-[768px]:justify-between">
 
-          <button className="border-0 cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#facc15] text-black font-semibold hover:bg-[#eab308] hover:-translate-y-px transition">
+          <button className="bg-[#facc15] text-black font-semibold px-[18px] py-[11px] rounded-[10px] hover:bg-[#eab308] transition">
             Export Drivers
           </button>
 
-          <div className="w-[42px] h-[42px] rounded-full bg-[linear-gradient(135deg,#facc15,#eab308)]" />
+          <div className="w-[42px] h-[42px] rounded-full bg-gradient-to-br from-[#facc15] to-[#eab308]" />
 
         </div>
       </div>
 
-      {/* FILTER BAR */}
-      <div className="bg-white rounded-[16px] border border-[#f0e6c2] shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-5 mb-6">
+      {/* FILTERS */}
+      <div className="bg-white p-5 rounded-[14px] border border-[#e5e7eb] mb-6">
 
-        <div className="flex flex-wrap gap-3.5 items-center">
+        <div className="flex flex-wrap gap-3">
 
+          {/* SEARCH */}
           <input
             className="flex-1 min-w-[220px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
             placeholder="Search drivers..."
             value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
           />
 
+          {/* STATUS FILTER */}
           <select
-            className="min-w-[180px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm"
+            className="flex-1 min-w-[180px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
             value={statusFilter}
-            onChange={(e) =>
-              setStatusFilter(e.target.value)
-            }
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setCurrentPage(1);
+            }}
           >
             <option>All Status</option>
             <option>Online</option>
@@ -140,21 +187,31 @@ export default function DriversPage() {
             <option>Busy</option>
           </select>
 
+          {/* VERIFICATION FILTER */}
           <select
-            className="min-w-[180px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm"
+            className="flex-1 min-w-[220px] border border-[#e5e7eb] rounded-[10px] py-3 px-3.5 text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
             value={verificationFilter}
-            onChange={(e) =>
-              setVerificationFilter(e.target.value)
-            }
+            onChange={(e) => {
+              setVerificationFilter(
+                e.target.value
+              );
+
+              setCurrentPage(1);
+            }}
           >
-            <option>All Verification</option>
+            <option>
+              All Verification
+            </option>
+
             <option>Verified</option>
+
             <option>Pending</option>
           </select>
 
+          {/* CLEAR */}
           <button
             onClick={clearFilters}
-            className="border-0 cursor-pointer py-[11px] px-[18px] rounded-[10px] bg-[#111827] text-white font-semibold hover:bg-black transition"
+            className="bg-[#111827] text-white px-5 py-3 rounded-[10px] hover:bg-black transition"
           >
             Clear
           </button>
@@ -163,151 +220,168 @@ export default function DriversPage() {
       </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-[14px] p-[22px] shadow-[0_4px_10px_rgba(0,0,0,0.04)] border border-[#e5e7eb] overflow-x-auto">
+      <div className="bg-white rounded-[14px] border border-[#e5e7eb] overflow-x-auto">
 
-        <table className="w-full border-collapse min-w-[900px]">
+        <table className="w-full min-w-[1000px]">
 
-          <thead className="bg-[#f9fafb]">
+          <thead className="bg-[#f9fafb] text-left">
 
-            <tr>
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Driver
-              </th>
+            <tr className="text-sm text-[#6b7280]">
 
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Status
-              </th>
+              <th className="p-4">Driver</th>
 
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Rides
-              </th>
+              <th className="p-4">Email</th>
 
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Earnings
-              </th>
+              <th className="p-4">Status</th>
 
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Rating
-              </th>
+              <th className="p-4">Rides</th>
 
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
+              <th className="p-4">Earnings</th>
+
+              <th className="p-4">Rating</th>
+
+              <th className="p-4">
                 Verification
               </th>
 
-              <th className="text-left p-[15px] text-sm text-[#6b7280]">
-                Action
-              </th>
+              <th className="p-4">Action</th>
+
             </tr>
 
           </thead>
 
           <tbody>
 
-            {filtered.map((d) => (
-              <tr
-                key={d.id}
-                className="hover:bg-[#fafafa] transition"
-              >
+            {paginatedDrivers.map(
+              (d, index) => (
+                <tr
+                  key={d.id || index}
+                  className="border-b hover:bg-[#fafafa]"
+                >
 
-                {/* DRIVER */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
+                  {/* DRIVER */}
+                  <td className="p-4">
 
-                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3">
 
-                    <div className="w-[42px] h-[42px] rounded-full bg-[#dbeafe] text-[#2563eb] flex items-center justify-center font-bold">
-                      {d.name.charAt(0)}
+                      <div className="w-[42px] h-[42px] rounded-full bg-[#dbeafe] text-[#2563eb] flex items-center justify-center font-bold">
+
+                        {(d.name || "D")
+                          .charAt(0)
+                          .toUpperCase()}
+
+                      </div>
+
+                      <div>
+
+                        <p className="font-semibold text-[#111827]">
+
+                          {d.name ||
+                            d.fullName ||
+                            "N/A"}
+
+                        </p>
+
+                        <span className="text-xs text-[#6b7280]">
+
+                          {d.id}
+
+                        </span>
+
+                      </div>
+
                     </div>
 
-                    <div>
-                      <p className="font-semibold text-[#111827]">
-                        {d.name}
-                      </p>
+                  </td>
 
-                      <span className="text-xs text-[#6b7280]">
-                        {d.id}
+                  {/* EMAIL */}
+                  <td className="p-4">
+                    {d.email || "N/A"}
+                  </td>
+
+                  {/* STATUS */}
+                  <td className="p-4">
+
+                    <span
+                      className={`text-xs px-3 py-1 rounded-full font-semibold ${statusStyle(
+                        d.status
+                      )}`}
+                    >
+                      {d.status || "Offline"}
+                    </span>
+
+                  </td>
+
+                  {/* RIDES */}
+                  <td className="p-4">
+                    {d.rides || 0}
+                  </td>
+
+                  {/* EARNINGS */}
+                  <td className="p-4 font-semibold">
+                    ₹
+                    {(
+                      d.earnings || 0
+                    ).toLocaleString(
+                      "en-IN"
+                    )}
+                  </td>
+
+                  {/* RATING */}
+                  <td className="p-4">
+                    ⭐ {d.rating || 0}
+                  </td>
+
+                  {/* VERIFICATION */}
+                  <td className="p-4">
+
+                    {d.verified ? (
+                      <span className="text-xs px-3 py-1 rounded-full bg-[#dcfce7] text-[#16a34a] font-semibold">
+                        Verified
                       </span>
-                    </div>
-
-                  </div>
-
-                </td>
-
-                {/* STATUS */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
-
-                  <span
-                    className={`py-1.5 px-3 rounded-full text-xs font-semibold ${statusStyle(
-                      d.status
-                    )}`}
-                  >
-                    {d.status}
-                  </span>
-
-                </td>
-
-                {/* RIDES */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6] text-sm text-[#374151]">
-                  {d.rides}
-                </td>
-
-                {/* EARNINGS */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6] font-semibold text-[#111827]">
-                  ₹{d.earnings.toLocaleString("en-IN")}
-                </td>
-
-                {/* RATING */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6] text-sm text-[#374151]">
-                  ⭐ {d.rating}
-                </td>
-
-                {/* VERIFICATION */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
-
-                  {d.verified ? (
-                    <span className="py-1.5 px-3 rounded-full text-xs font-semibold bg-[#dcfce7] text-[#16a34a]">
-                      Verified
-                    </span>
-                  ) : (
-                    <span className="py-1.5 px-3 rounded-full text-xs font-semibold bg-[#fef3c7] text-[#b45309]">
-                      Pending
-                    </span>
-                  )}
-
-                </td>
-
-                {/* ACTIONS */}
-                <td className="p-[16px_15px] border-b border-[#f3f4f6]">
-
-                  <div className="flex gap-2 flex-wrap">
-
-                    <button className="bg-[#eff6ff] text-[#2563eb] py-[7px] px-3 rounded-lg text-[13px] font-semibold hover:bg-[#dbeafe]">
-                      View
-                    </button>
-
-                    {!d.verified && (
-                      <button className="bg-[#dcfce7] text-[#16a34a] py-[7px] px-3 rounded-lg text-[13px] font-semibold hover:bg-[#bbf7d0]">
-                        Approve
-                      </button>
+                    ) : (
+                      <span className="text-xs px-3 py-1 rounded-full bg-[#fef3c7] text-[#b45309] font-semibold">
+                        Pending
+                      </span>
                     )}
 
-                    <button className="bg-[#fee2e2] text-[#dc2626] py-[7px] px-3 rounded-lg text-[13px] font-semibold hover:bg-[#fecaca]">
-                      Suspend
-                    </button>
+                  </td>
 
-                  </div>
+                  {/* ACTIONS */}
+                  <td className="p-4">
 
-                </td>
+                    <div className="flex gap-2 flex-wrap">
 
-              </tr>
-            ))}
+                      <button className="bg-[#eff6ff] text-[#2563eb] px-3 py-2 rounded-lg text-sm font-semibold hover:bg-[#dbeafe]">
+                        View
+                      </button>
 
-            {filtered.length === 0 && (
+                      {!d.verified && (
+                        <button className="bg-[#dcfce7] text-[#16a34a] px-3 py-2 rounded-lg text-sm font-semibold">
+                          Approve
+                        </button>
+                      )}
+
+                      <button className="bg-[#fee2e2] text-[#dc2626] px-3 py-2 rounded-lg text-sm font-semibold">
+                        Suspend
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+              )
+            )}
+
+            {paginatedDrivers.length ===
+              0 && (
               <tr>
                 <td
-                  colSpan={7}
-                  className="text-center p-7 text-[#6b7280]"
+                  colSpan={8}
+                  className="text-center p-6 text-[#6b7280]"
                 >
-                  No drivers match these filters.
+                  No drivers found.
                 </td>
               </tr>
             )}
@@ -315,6 +389,103 @@ export default function DriversPage() {
           </tbody>
 
         </table>
+
+        {/* ✅ PAGINATION */}
+        <div className="flex flex-wrap justify-between items-center p-4 border-t bg-[#f9fafb] gap-4">
+
+          {/* PAGE SIZE */}
+          <div className="flex items-center gap-2">
+
+            <span className="text-sm text-[#6b7280]">
+              Show
+            </span>
+
+            <select
+              className="border rounded px-2 py-1"
+              value={pageSize}
+              onChange={(e) =>
+                handlePageSizeChange(
+                  Number(e.target.value)
+                )
+              }
+            >
+              <option value={5}>5</option>
+
+              <option value={10}>
+                10
+              </option>
+
+              <option value={25}>
+                25
+              </option>
+
+              <option value={50}>
+                50
+              </option>
+            </select>
+
+            <span className="text-sm text-[#6b7280]">
+              entries
+            </span>
+
+          </div>
+
+          {/* PAGE NUMBERS */}
+          <div className="flex gap-2 flex-wrap">
+
+            <button
+              disabled={
+                currentPage === 1
+              }
+              onClick={() =>
+                setCurrentPage(
+                  (p) => p - 1
+                )
+              }
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+
+            {Array.from(
+              { length: totalPages },
+              (_, i) => (
+                <button
+                  key={i}
+                  onClick={() =>
+                    setCurrentPage(i + 1)
+                  }
+                  className={`px-3 py-1 border rounded ${
+                    currentPage ===
+                    i + 1
+                      ? "bg-blue-500 text-white"
+                      : ""
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              )
+            )}
+
+            <button
+              disabled={
+                currentPage ===
+                  totalPages ||
+                totalPages === 0
+              }
+              onClick={() =>
+                setCurrentPage(
+                  (p) => p + 1
+                )
+              }
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+
+          </div>
+
+        </div>
 
       </div>
 
